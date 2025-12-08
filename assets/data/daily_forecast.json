@@ -1,0 +1,68 @@
+{
+  "daily": [
+    {
+      "day": "Hôm nay",
+      "date": "15/12",
+      "icon": "cloudy",
+      "description": "Nhiều mây",
+      "rainChance": 20,
+      "tempHigh": 31,
+      "tempLow": 24
+    },
+    {
+      "day": "Thứ 2",
+      "date": "16/12",
+      "icon": "rainy",
+      "description": "Mưa rải rác",
+      "rainChance": 60,
+      "tempHigh": 29,
+      "tempLow": 23
+    },
+    {
+      "day": "Thứ 3",
+      "date": "17/12",
+      "icon": "partly_cloudy",
+      "description": "Có mây",
+      "rainChance": 30,
+      "tempHigh": 30,
+      "tempLow": 24
+    },
+    {
+      "day": "Thứ 4",
+      "date": "18/12",
+      "icon": "sunny",
+      "description": "Nắng",
+      "rainChance": 10,
+      "tempHigh": 32,
+      "tempLow": 25
+    },
+    {
+      "day": "Thứ 5",
+      "date": "19/12",
+      "icon": "sunny",
+      "description": "Nắng",
+      "rainChance": 5,
+      "tempHigh": 33,
+      "tempLow": 26
+    },
+    {
+      "day": "Thứ 6",
+      "date": "20/12",
+      "icon": "partly_cloudy",
+      "description": "Có mây",
+      "rainChance": 25,
+      "tempHigh": 31,
+      "tempLow": 25
+    },
+    {
+      "day": "Thứ 7",
+      "date": "21/12",
+      "icon": "cloudy",
+      "description": "Nhiều mây",
+      "rainChance": 40,
+      "tempHigh": 29,
+      "tempLow": 24
+    }
+  ]
+}
+

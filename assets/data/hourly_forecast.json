@@ -1,0 +1,77 @@
+{
+  "hourly": [
+    {
+      "time": "14:00",
+      "icon": "cloudy",
+      "temperature": 28,
+      "rainChance": 10
+    },
+    {
+      "time": "15:00",
+      "icon": "partly_cloudy",
+      "temperature": 29,
+      "rainChance": 15
+    },
+    {
+      "time": "16:00",
+      "icon": "sunny",
+      "temperature": 30,
+      "rainChance": 5
+    },
+    {
+      "time": "17:00",
+      "icon": "sunny",
+      "temperature": 30,
+      "rainChance": 0
+    },
+    {
+      "time": "18:00",
+      "icon": "partly_cloudy",
+      "temperature": 29,
+      "rainChance": 10
+    },
+    {
+      "time": "19:00",
+      "icon": "cloudy",
+      "temperature": 27,
+      "rainChance": 20
+    },
+    {
+      "time": "20:00",
+      "icon": "rainy",
+      "temperature": 26,
+      "rainChance": 45
+    },
+    {
+      "time": "21:00",
+      "icon": "rainy",
+      "temperature": 25,
+      "rainChance": 60
+    },
+    {
+      "time": "22:00",
+      "icon": "rainy",
+      "temperature": 24,
+      "rainChance": 55
+    },
+    {
+      "time": "23:00",
+      "icon": "cloudy",
+      "temperature": 24,
+      "rainChance": 30
+    },
+    {
+      "time": "00:00",
+      "icon": "cloudy",
+      "temperature": 23,
+      "rainChance": 20
+    },
+    {
+      "time": "01:00",
+      "icon": "partly_cloudy",
+      "temperature": 23,
+      "rainChance": 15
+    }
+  ]
+}
+

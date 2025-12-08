@@ -1,0 +1,20 @@
+{
+  "temperature": 28,
+  "feelsLike": 30,
+  "humidity": 65,
+  "windSpeed": 12,
+  "windDirection": "Đông Bắc",
+  "visibility": 10,
+  "pressure": 1013,
+  "uvIndex": 6,
+  "condition": "Nhiều mây",
+  "description": "Nhiều mây",
+  "icon": "cloudy",
+  "tempHigh": 31,
+  "tempLow": 24,
+  "sunrise": "06:15",
+  "sunset": "17:30",
+  "location": "Hà Nội - Hoàn Kiếm",
+  "updateTime": "13:45"
+}
+
