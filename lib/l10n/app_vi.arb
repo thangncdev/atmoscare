@@ -1,0 +1,80 @@
+{
+  "@@locale": "vi",
+  "settings": "Cài đặt",
+  "customizeApp": "Tùy chỉnh ứng dụng",
+  "temperatureUnit": "Đơn vị nhiệt độ",
+  "celsius": "Độ C (°C)",
+  "fahrenheit": "Độ F (°F)",
+  "weatherNotifications": "Thông báo thời tiết",
+  "badWeatherAndHighAQIAlerts": "Cảnh báo thời tiết xấu & AQI cao",
+  "aboutApp": "Giới thiệu ứng dụng",
+  "version": "Phiên bản {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyPolicy": "Chính sách bảo mật",
+  "howWeProtectYourData": "Cách chúng tôi bảo vệ dữ liệu của bạn",
+  "weatherAndAirQuality": "Thời tiết & Chất lượng không khí",
+  "allRightsReserved": "© 2025 AtmosCare. Bảo lưu mọi quyền.",
+  "language": "Ngôn ngữ",
+  "selectLanguage": "Chọn ngôn ngữ",
+  "vietnamese": "Tiếng Việt",
+  "english": "English",
+  "updateTime": "Cập nhật: {time}",
+  "@updateTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "high": "Cao",
+  "low": "Thấp",
+  "feelsLike": "Cảm giác",
+  "humidity": "Độ ẩm",
+  "wind": "Gió",
+  "visibility": "Tầm nhìn",
+  "pressure": "Áp suất",
+  "airQuality": "Chất lượng không khí",
+  "updatedMinutesAgo": "Cập nhật {minutes} phút trước",
+  "@updatedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sunrise": "Bình minh",
+  "sunset": "Hoàng hôn",
+  "direction": "Hướng",
+  "normal": "Bình thường",
+  "veryGood": "Rất tốt",
+  "good": "Tốt",
+  "limited": "Hạn chế",
+  "hourlyForecast": "Dự báo 24 giờ",
+  "viewDetails": "Xem chi tiết",
+  "airQualityGoodSafe": "Chất lượng không khí tốt, an toàn cho mọi hoạt động ngoài trời",
+  "moderate": "Trung bình",
+  "poor": "Kém",
+  "hazardous": "Nguy hại",
+  "home": "Trang chủ",
+  "forecast": "Dự báo",
+  "aqi": "AQI",
+  "healthRecommendations": "Khuyến nghị sức khỏe",
+  "basedOnCurrentAQI": "Dựa trên chỉ số AQI hiện tại",
+  "pollutantIndex": "Chỉ số các chất ô nhiễm",
+  "highAQIAlert": "Cảnh báo AQI cao",
+  "receiveNotificationWhenAQI": "Nhận thông báo khi AQI >150",
+  "aqiScale": "Thang đo AQI",
+  "aqiAndPollutantsIndex": "Chỉ số AQI & các chất ô nhiễm",
+  "weatherForecast": "Dự báo thời tiết",
+  "detailsForNext7Days": "Chi tiết 7 ngày tới",
+  "hourlyDetails": "Chi tiết theo giờ",
+  "twentyFourHours": "24 giờ",
+  "sevenDays": "7 ngày"
+}
+

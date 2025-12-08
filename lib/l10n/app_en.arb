@@ -1,0 +1,239 @@
+{
+  "@@locale": "en",
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings screen title"
+  },
+  "customizeApp": "Customize app",
+  "@customizeApp": {
+    "description": "Settings screen subtitle"
+  },
+  "temperatureUnit": "Temperature unit",
+  "@temperatureUnit": {
+    "description": "Temperature unit setting title"
+  },
+  "celsius": "Celsius (°C)",
+  "@celsius": {
+    "description": "Celsius unit label"
+  },
+  "fahrenheit": "Fahrenheit (°F)",
+  "@fahrenheit": {
+    "description": "Fahrenheit unit label"
+  },
+  "weatherNotifications": "Weather notifications",
+  "@weatherNotifications": {
+    "description": "Weather notifications setting title"
+  },
+  "badWeatherAndHighAQIAlerts": "Bad weather & high AQI alerts",
+  "@badWeatherAndHighAQIAlerts": {
+    "description": "Weather notifications setting subtitle"
+  },
+  "aboutApp": "About app",
+  "@aboutApp": {
+    "description": "About app setting title"
+  },
+  "version": "Version {version}",
+  "@version": {
+    "description": "App version text",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyPolicy": "Privacy policy",
+  "@privacyPolicy": {
+    "description": "Privacy policy setting title"
+  },
+  "howWeProtectYourData": "How we protect your data",
+  "@howWeProtectYourData": {
+    "description": "Privacy policy setting subtitle"
+  },
+  "weatherAndAirQuality": "Weather & Air Quality",
+  "@weatherAndAirQuality": {
+    "description": "App subtitle"
+  },
+  "allRightsReserved": "© 2025 AtmosCare. All rights reserved.",
+  "@allRightsReserved": {
+    "description": "Copyright text"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language setting title"
+  },
+  "selectLanguage": "Select language",
+  "@selectLanguage": {
+    "description": "Language setting subtitle"
+  },
+  "vietnamese": "Tiếng Việt",
+  "@vietnamese": {
+    "description": "Vietnamese language name"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language name"
+  },
+  "updateTime": "Updated: {time}",
+  "@updateTime": {
+    "description": "Update time label",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "high": "High",
+  "@high": {
+    "description": "High temperature label"
+  },
+  "low": "Low",
+  "@low": {
+    "description": "Low temperature label"
+  },
+  "feelsLike": "Feels like",
+  "@feelsLike": {
+    "description": "Feels like temperature label"
+  },
+  "humidity": "Humidity",
+  "@humidity": {
+    "description": "Humidity label"
+  },
+  "wind": "Wind",
+  "@wind": {
+    "description": "Wind label"
+  },
+  "visibility": "Visibility",
+  "@visibility": {
+    "description": "Visibility label"
+  },
+  "pressure": "Pressure",
+  "@pressure": {
+    "description": "Pressure label"
+  },
+  "airQuality": "Air quality",
+  "@airQuality": {
+    "description": "Air quality label"
+  },
+  "updatedMinutesAgo": "Updated {minutes} minutes ago",
+  "@updatedMinutesAgo": {
+    "description": "Updated minutes ago text",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sunrise": "Sunrise",
+  "@sunrise": {
+    "description": "Sunrise label"
+  },
+  "sunset": "Sunset",
+  "@sunset": {
+    "description": "Sunset label"
+  },
+  "direction": "Direction",
+  "@direction": {
+    "description": "Direction label"
+  },
+  "normal": "Normal",
+  "@normal": {
+    "description": "Normal status"
+  },
+  "veryGood": "Very good",
+  "@veryGood": {
+    "description": "Very good status"
+  },
+  "good": "Good",
+  "@good": {
+    "description": "Good status"
+  },
+  "limited": "Limited",
+  "@limited": {
+    "description": "Limited status"
+  },
+  "hourlyForecast": "24-hour forecast",
+  "@hourlyForecast": {
+    "description": "24-hour forecast title"
+  },
+  "viewDetails": "View details",
+  "@viewDetails": {
+    "description": "View details button"
+  },
+  "airQualityGoodSafe": "Air quality is good, safe for all outdoor activities",
+  "@airQualityGoodSafe": {
+    "description": "Default air quality recommendation"
+  },
+  "moderate": "Moderate",
+  "@moderate": {
+    "description": "Moderate AQI status"
+  },
+  "poor": "Poor",
+  "@poor": {
+    "description": "Poor AQI status"
+  },
+  "hazardous": "Hazardous",
+  "@hazardous": {
+    "description": "Hazardous AQI status"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home navigation label"
+  },
+  "forecast": "Forecast",
+  "@forecast": {
+    "description": "Forecast navigation label"
+  },
+  "aqi": "AQI",
+  "@aqi": {
+    "description": "AQI navigation label"
+  },
+  "healthRecommendations": "Health recommendations",
+  "@healthRecommendations": {
+    "description": "Health recommendations title"
+  },
+  "basedOnCurrentAQI": "Based on current AQI index",
+  "@basedOnCurrentAQI": {
+    "description": "Health recommendations subtitle"
+  },
+  "pollutantIndex": "Pollutant Index",
+  "@pollutantIndex": {
+    "description": "Pollutant index title"
+  },
+  "highAQIAlert": "High AQI Alert",
+  "@highAQIAlert": {
+    "description": "High AQI alert title"
+  },
+  "receiveNotificationWhenAQI": "Receive notifications when AQI >150",
+  "@receiveNotificationWhenAQI": {
+    "description": "High AQI alert subtitle"
+  },
+  "aqiScale": "AQI Scale",
+  "@aqiScale": {
+    "description": "AQI scale title"
+  },
+  "aqiAndPollutantsIndex": "AQI Index & Pollutants",
+  "@aqiAndPollutantsIndex": {
+    "description": "AQI screen subtitle"
+  },
+  "weatherForecast": "Weather Forecast",
+  "@weatherForecast": {
+    "description": "Weather forecast screen title"
+  },
+  "detailsForNext7Days": "Details for the next 7 days",
+  "@detailsForNext7Days": {
+    "description": "Weather forecast screen subtitle"
+  },
+  "hourlyDetails": "Hourly Details",
+  "@hourlyDetails": {
+    "description": "Hourly forecast title"
+  },
+  "twentyFourHours": "24 Hours",
+  "@twentyFourHours": {
+    "description": "24 hours toggle label"
+  },
+  "sevenDays": "7 Days",
+  "@sevenDays": {
+    "description": "7 days toggle label"
+  }
+}
+

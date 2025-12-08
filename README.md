@@ -205,6 +205,42 @@ Test với API thật và xử lý các edge cases:
 
 ## 🎨 Customization
 
+### Responsive Design với ScreenUtil
+
+Ứng dụng sử dụng `flutter_screenutil` để tự động scale UI theo kích thước màn hình.
+
+**Design size mặc định**: 375x812 (iPhone X)
+
+**Cách sử dụng:**
+
+```dart
+// Import extension
+import '../core/screen_util_helper.dart';
+
+// Sử dụng extension
+padding: EdgeInsets.all(16.w),      // Width responsive
+SizedBox(height: 24.h),              // Height responsive
+fontSize: 18.sp,                     // Font size responsive
+borderRadius: BorderRadius.circular(8.r), // Radius responsive
+
+// Screen dimensions
+width: 100.swp,  // 100% screen width
+height: 50.shp,  // 50% screen height
+```
+
+**Thay đổi design size:**
+
+Chỉnh sửa trong `lib/main.dart`:
+
+```dart
+ScreenUtilInit(
+  designSize: const Size(375, 812), // Thay đổi theo design của bạn
+  // ...
+)
+```
+
+Xem thêm ví dụ trong `lib/presentation/core/screen_util_example.dart`
+
 ### Thay đổi Theme
 
 Chỉnh sửa `lib/presentation/core/theme.dart`:

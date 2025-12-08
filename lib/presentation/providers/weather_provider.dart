@@ -4,6 +4,8 @@ import '../../domain/entities/hourly_forecast_entity.dart';
 import '../../domain/entities/daily_forecast_entity.dart';
 import '../../domain/repositories/weather_repository.dart';
 import '../../data/repositories/weather_repository_impl.dart';
+import 'location_provider.dart';
+import 'locale_provider.dart';
 
 /// Provider cho WeatherRepository
 final weatherRepositoryProvider = Provider<WeatherRepository>((ref) {
@@ -14,20 +16,26 @@ final weatherRepositoryProvider = Provider<WeatherRepository>((ref) {
 final currentWeatherProvider =
     FutureProvider<WeatherEntity>((ref) async {
   final repository = ref.watch(weatherRepositoryProvider);
-  return await repository.getCurrentWeather();
+  final location = ref.watch(currentLocationProvider);
+  final locale = ref.watch(localeProvider);
+  return await repository.getCurrentWeather(location: location, locale: locale);
 });
 
 /// Provider cho dự báo theo giờ
 final hourlyForecastProvider =
     FutureProvider<List<HourlyForecastEntity>>((ref) async {
   final repository = ref.watch(weatherRepositoryProvider);
-  return await repository.getHourlyForecast();
+  final location = ref.watch(currentLocationProvider);
+  final locale = ref.watch(localeProvider);
+  return await repository.getHourlyForecast(location: location, locale: locale);
 });
 
 /// Provider cho dự báo theo ngày
 final dailyForecastProvider =
     FutureProvider<List<DailyForecastEntity>>((ref) async {
   final repository = ref.watch(weatherRepositoryProvider);
-  return await repository.getDailyForecast();
+  final location = ref.watch(currentLocationProvider);
+  final locale = ref.watch(localeProvider);
+  return await repository.getDailyForecast(location: location, locale: locale);
 });
 

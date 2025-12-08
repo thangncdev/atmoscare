@@ -5,13 +5,20 @@ import '../screens/home_screen.dart';
 import '../screens/forecast_screen.dart';
 import '../screens/aqi_screen.dart';
 import '../screens/settings_screen.dart';
+import '../../l10n/app_localizations.dart';
 import 'theme.dart';
+
+import '../screens/splash_screen.dart';
 
 /// Router configuration cho ứng dụng
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/splash',
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       ShellRoute(
         builder: (context, state, child) {
           return MainNavigationWrapper(
@@ -55,6 +62,7 @@ class MainNavigationWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: child,
@@ -79,22 +87,22 @@ class MainNavigationWrapper extends StatelessWidget {
         },
         selectedItemColor: AppTheme.primaryColor,
         unselectedItemColor: AppTheme.textSecondary,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Trang chủ',
+            icon: const Icon(Icons.home),
+            label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Dự báo',
+            icon: const Icon(Icons.calendar_today),
+            label: l10n.forecast,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.air),
-            label: 'AQI',
+            icon: const Icon(Icons.air),
+            label: l10n.aqi,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Cài đặt',
+            icon: const Icon(Icons.settings),
+            label: l10n.settings,
           ),
         ],
       ),
