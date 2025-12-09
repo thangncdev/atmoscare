@@ -1,4 +1,4 @@
-package com.example.atmoscare
+package com.thangnc.atmoscare
 
 import io.flutter.embedding.android.FlutterActivity
 

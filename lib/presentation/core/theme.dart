@@ -104,6 +104,8 @@ class AppTheme {
 
   static EdgeInsets get paddingHorizontal =>
       EdgeInsets.symmetric(horizontal: 16.w);
+  static EdgeInsets get paddingScreen =>
+      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h);
   static EdgeInsets get paddingVertical => EdgeInsets.symmetric(vertical: 12.w);
 
   // Border Radius (responsive với ScreenUtil)
@@ -115,6 +117,10 @@ class AppTheme {
   static BorderRadius get radius2xl => BorderRadius.circular(20.r);
   static BorderRadius get radius3xl => BorderRadius.circular(28.r);
   static BorderRadius get radius4xl => BorderRadius.circular(40.r);
+  static BorderRadius get radiusHeaderGradient => BorderRadius.only(
+        bottomLeft: Radius.circular(24.r),
+        bottomRight: Radius.circular(24.r),
+      );
 
   // Curved bottom border (cho header sections)
   static BorderRadius get curvedBottom => BorderRadius.only(

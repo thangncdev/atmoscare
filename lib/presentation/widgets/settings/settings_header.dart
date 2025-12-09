@@ -14,7 +14,10 @@ class SettingsHeader extends StatelessWidget {
     
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(gradient: AppTheme.skyGradient),
+      decoration: BoxDecoration(
+        borderRadius: AppTheme.radiusHeaderGradient,
+        gradient: AppTheme.skyGradient,
+      ),
       child: Stack(
         children: [
           // Grid pattern background

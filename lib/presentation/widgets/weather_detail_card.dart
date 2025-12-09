@@ -94,10 +94,7 @@ class WeatherDetailCard extends StatelessWidget {
               SizedBox(width: 4.w),
               Text(
                 unit,
-                style: TextStyle(
-                  color: AppTheme.textTertiary,
-                  fontSize: 12.sp,
-                ),
+                style: TextStyle(color: AppTheme.textTertiary, fontSize: 12.sp),
               ),
             ],
           ),
@@ -105,10 +102,7 @@ class WeatherDetailCard extends StatelessWidget {
             SizedBox(height: 6.h),
             Text(
               subtitle!,
-              style: TextStyle(
-                color: AppTheme.textTertiary,
-                fontSize: 11.sp,
-              ),
+              style: TextStyle(color: AppTheme.textTertiary, fontSize: 11.sp),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -154,7 +148,7 @@ class WeatherDetailsGrid extends StatelessWidget {
   final double windSpeed;
   final String windDirection;
   final double pressure;
-  final double visibility;
+  final double rain;
 
   const WeatherDetailsGrid({
     super.key,
@@ -162,7 +156,7 @@ class WeatherDetailsGrid extends StatelessWidget {
     required this.windSpeed,
     required this.windDirection,
     required this.pressure,
-    required this.visibility,
+    required this.rain,
   });
 
   @override
@@ -195,26 +189,6 @@ class WeatherDetailsGrid extends StatelessWidget {
               child: SizedBox(
                 height: cardHeight,
                 child: WeatherDetailCard(
-                  icon: Icons.navigation,
-                  label: l10n.wind,
-                  value: '${windSpeed.toInt()}',
-                  unit: 'km/h',
-                  startColor: AppTheme.teal400,
-                  endColor: AppTheme.teal600,
-                  subtitle: '${l10n.direction} $windDirection',
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 16.h),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: cardHeight,
-                child: WeatherDetailCard(
                   icon: Icons.compress,
                   label: l10n.pressure,
                   value: '${pressure.toInt()}',
@@ -225,29 +199,9 @@ class WeatherDetailsGrid extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 16.w),
-            Expanded(
-              child: SizedBox(
-                height: cardHeight,
-                child: WeatherDetailCard(
-                  icon: Icons.visibility,
-                  label: l10n.visibility,
-                  value: '${visibility.toInt()}',
-                  unit: 'km',
-                  startColor: AppTheme.teal500,
-                  endColor: AppTheme.teal700,
-                  subtitle: visibility >= 10
-                      ? l10n.veryGood
-                      : visibility >= 5
-                          ? l10n.good
-                          : l10n.limited,
-                ),
-              ),
-            ),
           ],
         ),
       ],
     );
   }
 }
-

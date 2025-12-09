@@ -53,7 +53,7 @@
   "@weatherAndAirQuality": {
     "description": "App subtitle"
   },
-  "allRightsReserved": "© 2025 AtmosCare. All rights reserved.",
+  "allRightsReserved": "© 2025 Atmos Care. All rights reserved.",
   "@allRightsReserved": {
     "description": "Copyright text"
   },
@@ -234,6 +234,166 @@
   "sevenDays": "7 Days",
   "@sevenDays": {
     "description": "7 days toggle label"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today label"
+  },
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Tomorrow label"
+  },
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Sunday day name"
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Monday day name"
+  },
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Tuesday day name"
+  },
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Wednesday day name"
+  },
+  "thursday": "Thursday",
+  "@thursday": {
+    "description": "Thursday day name"
+  },
+  "friday": "Friday",
+  "@friday": {
+    "description": "Friday day name"
+  },
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Saturday day name"
+  },
+  "uvIndex": "UV Index",
+  "@uvIndex": {
+    "description": "UV Index label"
+  },
+  "rain": "Rain",
+  "@rain": {
+    "description": "Rain label"
+  },
+  "noRain": "No rain",
+  "@noRain": {
+    "description": "No rain status"
+  },
+  "lightRain": "Light rain",
+  "@lightRain": {
+    "description": "Light rain status"
+  },
+  "moderateRain": "Moderate rain",
+  "@moderateRain": {
+    "description": "Moderate rain status"
+  },
+  "heavyRain": "Heavy rain",
+  "@heavyRain": {
+    "description": "Heavy rain status"
+  },
+  "selectLocation": "Select location",
+  "@selectLocation": {
+    "description": "Select location screen title"
+  },
+  "searchCity": "Search city...",
+  "@searchCity": {
+    "description": "Search city placeholder"
+  },
+  "currentLocation": "Current location",
+  "@currentLocation": {
+    "description": "Current location label"
+  },
+  "getCurrentLocationFromGPS": "Get current location from GPS",
+  "@getCurrentLocationFromGPS": {
+    "description": "Get current location from GPS subtitle"
+  },
+  "enterCityNameToSearch": "Enter city name to search",
+  "@enterCityNameToSearch": {
+    "description": "Enter city name to search message"
+  },
+  "locationServiceDisabled": "Location service disabled",
+  "@locationServiceDisabled": {
+    "description": "Location service disabled title"
+  },
+  "locationServiceDisabledMessage": "Please enable location services in your device settings to use this feature.",
+  "@locationServiceDisabledMessage": {
+    "description": "Location service disabled message"
+  },
+  "locationPermissionDenied": "Location permission denied",
+  "@locationPermissionDenied": {
+    "description": "Location permission denied title"
+  },
+  "locationPermissionDeniedMessage": "We need location permission to show weather for your current location.",
+  "@locationPermissionDeniedMessage": {
+    "description": "Location permission denied message"
+  },
+  "locationPermissionDeniedForever": "Location permission required",
+  "@locationPermissionDeniedForever": {
+    "description": "Location permission denied forever title"
+  },
+  "locationPermissionDeniedForeverMessage": "Location permission has been permanently denied. Please enable it in app settings.",
+  "@locationPermissionDeniedForeverMessage": {
+    "description": "Location permission denied forever message"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Open settings button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "grantPermission": "Grant Permission",
+  "@grantPermission": {
+    "description": "Grant permission button"
+  },
+  "dailyWeatherReminderTitle": "Check today's weather",
+  "@dailyWeatherReminderTitle": {
+    "description": "Daily weather reminder notification title"
+  },
+  "dailyWeatherReminderBody": "Check the weather forecast to plan for a great day!",
+  "@dailyWeatherReminderBody": {
+    "description": "Daily weather reminder notification body"
+  },
+  "enableNotificationsTitle": "Enable Notifications",
+  "@enableNotificationsTitle": {
+    "description": "Enable notifications dialog title"
+  },
+  "enableNotificationsMessage": "Enable notifications to receive alerts about bad weather and poor air quality.",
+  "@enableNotificationsMessage": {
+    "description": "Enable notifications dialog message"
+  },
+  "enable": "Enable",
+  "@enable": {
+    "description": "Enable button"
+  },
+  "notNow": "Not Now",
+  "@notNow": {
+    "description": "Not now button"
+  },
+  "tapToLearnMore": "Tap to learn more",
+  "@tapToLearnMore": {
+    "description": "About app subtitle"
+  },
+  "aboutAppContentEnglish": "🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.",
+  "@aboutAppContentEnglish": {
+    "description": "About app content in English"
+  },
+  "aboutAppContentVietnamese": "🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.",
+  "@aboutAppContentVietnamese": {
+    "description": "About app content in Vietnamese"
+  },
+  "contactSupport": "Contact Support",
+  "@contactSupport": {
+    "description": "Contact support setting title"
+  },
+  "sendEmailForSupport": "Send email for support",
+  "@sendEmailForSupport": {
+    "description": "Contact support setting subtitle"
   }
 }
 

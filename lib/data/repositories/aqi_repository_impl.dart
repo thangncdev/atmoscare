@@ -23,7 +23,7 @@ class AQIRepositoryImpl implements AQIRepository {
     try {
       final lat = location?.latitude ?? _defaultLatitude;
       final lon = location?.longitude ?? _defaultLongitude;
-      final locationName = location?.shortDisplayName ?? 'Hà Nội';
+      final locationName = location?.shortDisplayName ?? '';
 
       final response = await _dio.get(
         _baseUrl,
@@ -42,7 +42,7 @@ class AQIRepositoryImpl implements AQIRepository {
       // Use European AQI (EAQI) as primary, fallback to US AQI
       final aqi = (current['us_aqi'] ?? current['european_aqi']) as int;
       final status = AQIHelper.getAQIStatus(aqi, locale: locale);
-      final recommendation = AQIHelper.getAQIRecommendation(aqi, locale: locale);
+      final recommendations = AQIHelper.getAQIRecommendation(aqi, locale: locale);
 
       // Build pollutants list
       final pollutants = <PollutantEntity>[];
@@ -71,6 +71,7 @@ class AQIRepositoryImpl implements AQIRepository {
             status: AQIHelper.getPollutantStatus(
               (current['pm2_5'] as num).toDouble(),
               'PM2.5',
+              locale: locale,
             ),
           ),
         );
@@ -85,6 +86,7 @@ class AQIRepositoryImpl implements AQIRepository {
             status: AQIHelper.getPollutantStatus(
               (current['carbon_monoxide'] as num).toDouble(),
               'CO',
+              locale: locale,
             ),
           ),
         );
@@ -99,6 +101,7 @@ class AQIRepositoryImpl implements AQIRepository {
             status: AQIHelper.getPollutantStatus(
               (current['nitrogen_dioxide'] as num).toDouble(),
               'NO₂',
+              locale: locale,
             ),
           ),
         );
@@ -113,6 +116,7 @@ class AQIRepositoryImpl implements AQIRepository {
             status: AQIHelper.getPollutantStatus(
               (current['sulphur_dioxide'] as num).toDouble(),
               'SO₂',
+              locale: locale,
             ),
           ),
         );
@@ -127,6 +131,7 @@ class AQIRepositoryImpl implements AQIRepository {
             status: AQIHelper.getPollutantStatus(
               (current['ozone'] as num).toDouble(),
               'O₃',
+              locale: locale,
             ),
           ),
         );
@@ -151,7 +156,7 @@ class AQIRepositoryImpl implements AQIRepository {
         location: locationName,
         updateTime: updateTime,
         pollutants: pollutants,
-        recommendations: [recommendation],
+        recommendations: recommendations,
       );
     } catch (e) {
       throw Exception('Failed to load AQI data: $e');

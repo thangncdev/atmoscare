@@ -38,47 +38,36 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 800),
     );
     _logoScale = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _logoController,
-        curve: Curves.elasticOut,
-      ),
+      CurvedAnimation(parent: _logoController, curve: Curves.elasticOut),
     );
-    _logoOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _logoController,
-        curve: Curves.easeIn,
-      ),
-    );
+    _logoOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _logoController, curve: Curves.easeIn));
 
     // Text animation
     _textController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _textController,
-        curve: Curves.easeIn,
-      ),
-    );
-    _textTranslate = Tween<double>(begin: 20.0, end: 0.0).animate(
-      CurvedAnimation(
-        parent: _textController,
-        curve: Curves.easeOut,
-      ),
-    );
+    _textOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
+    _textTranslate = Tween<double>(
+      begin: 20.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut));
 
     // Dots animation
     _dotsController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat();
-    _dotsOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _dotsController,
-        curve: Curves.easeIn,
-      ),
-    );
+    _dotsOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _dotsController, curve: Curves.easeIn));
 
     // Cloud animations
     _cloud1Controller = AnimationController(
@@ -140,9 +129,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.splashGradient,
-        ),
+        decoration: BoxDecoration(gradient: AppTheme.splashGradient),
         child: Stack(
           children: [
             // Animated background clouds
@@ -208,11 +195,7 @@ class _SplashScreenState extends State<SplashScreen>
           right: right != null ? right - xOffset : null,
           child: Opacity(
             opacity: 0.2,
-            child: Icon(
-              Icons.cloud,
-              size: size,
-              color: Colors.white,
-            ),
+            child: Icon(Icons.cloud, size: size, color: Colors.white),
           ),
         );
       },
@@ -251,9 +234,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: ClipOval(
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                        child: Container(
-                          color: Colors.transparent,
-                        ),
+                        child: Container(color: Colors.transparent),
                       ),
                     ),
                   ),
@@ -282,7 +263,9 @@ class _SplashScreenState extends State<SplashScreen>
                     animation: _aqiDotController,
                     builder: (context, child) {
                       // Spring-like scale animation
-                      final scale = Curves.elasticOut.transform(_aqiDotController.value);
+                      final scale = Curves.elasticOut.transform(
+                        _aqiDotController.value,
+                      );
                       return Transform.scale(
                         scale: scale,
                         child: Container(
@@ -291,10 +274,7 @@ class _SplashScreenState extends State<SplashScreen>
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: AppTheme.aqiGood, // Green từ theme
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4.w,
-                            ),
+                            border: Border.all(color: Colors.white, width: 4.w),
                           ),
                           child: Icon(
                             Icons.water_drop,
@@ -325,7 +305,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               children: [
                 Text(
-                  'AtmosCare',
+                  'Atmos Care',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 36.sp,
@@ -351,45 +331,6 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget _buildLoadingDots() {
-    return AnimatedBuilder(
-      animation: _dotsController,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _dotsOpacity.value,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(3, (index) {
-              final delay = index * 0.2;
-              final animationValue = (_dotsController.value + delay) % 1.0;
-              
-              // Scale animation: 1 -> 1.5 -> 1
-              final scale = 1.0 + (animationValue < 0.5
-                      ? animationValue * 2 * 0.5
-                      : (1.0 - animationValue) * 2 * 0.5);
-              
-              // Opacity animation: 0.5 -> 1 -> 0.5
-              final opacity = 0.5 + (animationValue < 0.5
-                      ? animationValue * 2 * 0.5
-                      : (1.0 - animationValue) * 2 * 0.5);
-
-              return Transform.scale(
-                scale: scale,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w),
-                  width: 8.w,
-                  height: 8.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Opacity(opacity: opacity),
-                ),
-              );
-            }),
-          ),
-        );
-      },
-    );
+    return Center(child: CircularProgressIndicator(color: Colors.white));
   }
 }
-

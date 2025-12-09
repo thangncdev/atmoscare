@@ -5,7 +5,7 @@
   "temperatureUnit": "Đơn vị nhiệt độ",
   "celsius": "Độ C (°C)",
   "fahrenheit": "Độ F (°F)",
-  "weatherNotifications": "Thông báo thời tiết",
+  "weatherNotifications": "Thông báo",
   "badWeatherAndHighAQIAlerts": "Cảnh báo thời tiết xấu & AQI cao",
   "aboutApp": "Giới thiệu ứng dụng",
   "version": "Phiên bản {version}",
@@ -19,7 +19,7 @@
   "privacyPolicy": "Chính sách bảo mật",
   "howWeProtectYourData": "Cách chúng tôi bảo vệ dữ liệu của bạn",
   "weatherAndAirQuality": "Thời tiết & Chất lượng không khí",
-  "allRightsReserved": "© 2025 AtmosCare. Bảo lưu mọi quyền.",
+  "allRightsReserved": "© 2025 Atmos Care. Bảo lưu mọi quyền.",
   "language": "Ngôn ngữ",
   "selectLanguage": "Chọn ngôn ngữ",
   "vietnamese": "Tiếng Việt",
@@ -75,6 +75,61 @@
   "detailsForNext7Days": "Chi tiết 7 ngày tới",
   "hourlyDetails": "Chi tiết theo giờ",
   "twentyFourHours": "24 giờ",
-  "sevenDays": "7 ngày"
+  "sevenDays": "7 ngày",
+  "today": "Hôm nay",
+  "tomorrow": "Ngày mai",
+  "sunday": "Chủ nhật",
+  "monday": "Thứ hai",
+  "tuesday": "Thứ ba",
+  "wednesday": "Thứ tư",
+  "thursday": "Thứ năm",
+  "friday": "Thứ sáu",
+  "saturday": "Thứ bảy",
+  "uvIndex": "Chỉ số UV",
+  "rain": "Mưa",
+  "noRain": "Không mưa",
+  "lightRain": "Mưa nhẹ",
+  "moderateRain": "Mưa vừa",
+  "heavyRain": "Mưa nặng",
+  "selectLocation": "Chọn vị trí",
+  "searchCity": "Tìm kiếm thành phố...",
+  "currentLocation": "Vị trí hiện tại",
+  "getCurrentLocationFromGPS": "Lấy vị trí hiện tại từ GPS",
+  "enterCityNameToSearch": "Nhập tên thành phố để tìm kiếm",
+  "locationServiceDisabled": "Dịch vụ vị trí bị tắt",
+  "locationServiceDisabledMessage": "Vui lòng bật dịch vụ vị trí trong cài đặt thiết bị để sử dụng tính năng này.",
+  "locationPermissionDenied": "Quyền truy cập vị trí bị từ chối",
+  "locationPermissionDeniedMessage": "Chúng tôi cần quyền truy cập vị trí để hiển thị thời tiết tại vị trí hiện tại của bạn.",
+  "locationPermissionDeniedForever": "Cần quyền truy cập vị trí",
+  "locationPermissionDeniedForeverMessage": "Quyền truy cập vị trí đã bị từ chối vĩnh viễn. Vui lòng bật trong cài đặt ứng dụng.",
+  "openSettings": "Mở Cài đặt",
+  "cancel": "Hủy",
+  "grantPermission": "Cấp quyền",
+  "dailyWeatherReminderTitle": "Kiểm tra thời tiết hôm nay",
+  "dailyWeatherReminderBody": "Hãy xem dự báo thời tiết để có kế hoạch cho một ngày tốt đẹp!",
+  "enableNotificationsTitle": "Bật thông báo",
+  "enableNotificationsMessage": "Bật thông báo để nhận cảnh báo về thời tiết xấu và chất lượng không khí kém.",
+  "enable": "Bật",
+  "notNow": "Không phải bây giờ",
+  "tapToLearnMore": "Nhấn để tìm hiểu thêm",
+  "@tapToLearnMore": {
+    "description": "About app subtitle"
+  },
+  "aboutAppContentVietnamese": "🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.",
+  "@aboutAppContentVietnamese": {
+    "description": "About app content in Vietnamese"
+  },
+  "aboutAppContentEnglish": "🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.",
+  "@aboutAppContentEnglish": {
+    "description": "About app content in English"
+  },
+  "contactSupport": "Liên hệ hỗ trợ",
+  "@contactSupport": {
+    "description": "Contact support setting title"
+  },
+  "sendEmailForSupport": "Gửi email để được hỗ trợ",
+  "@sendEmailForSupport": {
+    "description": "Contact support setting subtitle"
+  }
 }
 

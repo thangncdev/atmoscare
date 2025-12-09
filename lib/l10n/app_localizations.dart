@@ -173,7 +173,7 @@ abstract class AppLocalizations {
   /// Copyright text
   ///
   /// In en, this message translates to:
-  /// **'© 2025 AtmosCare. All rights reserved.'**
+  /// **'© 2025 Atmos Care. All rights reserved.'**
   String get allRightsReserved;
 
   /// Language setting title
@@ -427,6 +427,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'7 Days'**
   String get sevenDays;
+
+  /// Today label
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Tomorrow label
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// Sunday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
+
+  /// Monday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get monday;
+
+  /// Tuesday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get tuesday;
+
+  /// Wednesday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get wednesday;
+
+  /// Thursday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get thursday;
+
+  /// Friday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get friday;
+
+  /// Saturday day name
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// UV Index label
+  ///
+  /// In en, this message translates to:
+  /// **'UV Index'**
+  String get uvIndex;
+
+  /// Rain label
+  ///
+  /// In en, this message translates to:
+  /// **'Rain'**
+  String get rain;
+
+  /// No rain status
+  ///
+  /// In en, this message translates to:
+  /// **'No rain'**
+  String get noRain;
+
+  /// Light rain status
+  ///
+  /// In en, this message translates to:
+  /// **'Light rain'**
+  String get lightRain;
+
+  /// Moderate rain status
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate rain'**
+  String get moderateRain;
+
+  /// Heavy rain status
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy rain'**
+  String get heavyRain;
+
+  /// Select location screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Select location'**
+  String get selectLocation;
+
+  /// Search city placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Search city...'**
+  String get searchCity;
+
+  /// Current location label
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get currentLocation;
+
+  /// Get current location from GPS subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Get current location from GPS'**
+  String get getCurrentLocationFromGPS;
+
+  /// Enter city name to search message
+  ///
+  /// In en, this message translates to:
+  /// **'Enter city name to search'**
+  String get enterCityNameToSearch;
+
+  /// Location service disabled title
+  ///
+  /// In en, this message translates to:
+  /// **'Location service disabled'**
+  String get locationServiceDisabled;
+
+  /// Location service disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable location services in your device settings to use this feature.'**
+  String get locationServiceDisabledMessage;
+
+  /// Location permission denied title
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission denied'**
+  String get locationPermissionDenied;
+
+  /// Location permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'We need location permission to show weather for your current location.'**
+  String get locationPermissionDeniedMessage;
+
+  /// Location permission denied forever title
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission required'**
+  String get locationPermissionDeniedForever;
+
+  /// Location permission denied forever message
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission has been permanently denied. Please enable it in app settings.'**
+  String get locationPermissionDeniedForeverMessage;
+
+  /// Open settings button
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Grant permission button
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Permission'**
+  String get grantPermission;
+
+  /// Daily weather reminder notification title
+  ///
+  /// In en, this message translates to:
+  /// **'Check today\'s weather'**
+  String get dailyWeatherReminderTitle;
+
+  /// Daily weather reminder notification body
+  ///
+  /// In en, this message translates to:
+  /// **'Check the weather forecast to plan for a great day!'**
+  String get dailyWeatherReminderBody;
+
+  /// Enable notifications dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enableNotificationsTitle;
+
+  /// Enable notifications dialog message
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications to receive alerts about bad weather and poor air quality.'**
+  String get enableNotificationsMessage;
+
+  /// Enable button
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get enable;
+
+  /// Not now button
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get notNow;
+
+  /// About app subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to learn more'**
+  String get tapToLearnMore;
+
+  /// About app content in English
+  ///
+  /// In en, this message translates to:
+  /// **'🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.'**
+  String get aboutAppContentEnglish;
+
+  /// About app content in Vietnamese
+  ///
+  /// In en, this message translates to:
+  /// **'🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.'**
+  String get aboutAppContentVietnamese;
+
+  /// Contact support setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Support'**
+  String get contactSupport;
+
+  /// Contact support setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Send email for support'**
+  String get sendEmailForSupport;
 }
 
 class _AppLocalizationsDelegate

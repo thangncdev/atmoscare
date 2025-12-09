@@ -128,16 +128,16 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
       curve: curve,
       builder: (context, value, child) {
         // Tính toán animation value với delay
-        final animationValue = (value * (delay.inMilliseconds + duration.inMilliseconds) - delay.inMilliseconds) / duration.inMilliseconds;
+        final animationValue =
+            (value * (delay.inMilliseconds + duration.inMilliseconds) -
+                delay.inMilliseconds) /
+            duration.inMilliseconds;
         final clampedValue = animationValue.clamp(0.0, 1.0);
         final curvedValue = curve.transform(clampedValue);
-        
+
         return Transform.translate(
           offset: Offset((1 - curvedValue) * 50, 0),
-          child: Opacity(
-            opacity: curvedValue,
-            child: child,
-          ),
+          child: Opacity(opacity: curvedValue, child: child),
         );
       },
       child: child,
@@ -157,16 +157,16 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
       curve: curve,
       builder: (context, value, child) {
         // Tính toán animation value với delay
-        final animationValue = (value * (delay.inMilliseconds + duration.inMilliseconds) - delay.inMilliseconds) / duration.inMilliseconds;
+        final animationValue =
+            (value * (delay.inMilliseconds + duration.inMilliseconds) -
+                delay.inMilliseconds) /
+            duration.inMilliseconds;
         final clampedValue = animationValue.clamp(0.0, 1.0);
         final curvedValue = curve.transform(clampedValue);
-        
+
         return Transform.translate(
           offset: Offset(0, (1 - curvedValue) * 30),
-          child: Opacity(
-            opacity: curvedValue,
-            child: child,
-          ),
+          child: Opacity(opacity: curvedValue, child: child),
         );
       },
       child: child,
@@ -186,16 +186,16 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
       curve: curve,
       builder: (context, value, child) {
         // Tính toán animation value với delay
-        final animationValue = (value * (delay.inMilliseconds + duration.inMilliseconds) - delay.inMilliseconds) / duration.inMilliseconds;
+        final animationValue =
+            (value * (delay.inMilliseconds + duration.inMilliseconds) -
+                delay.inMilliseconds) /
+            duration.inMilliseconds;
         final clampedValue = animationValue.clamp(0.0, 1.0);
         final curvedValue = curve.transform(clampedValue);
-        
+
         return Transform.scale(
           scale: 0.8 + (curvedValue * 0.2),
-          child: Opacity(
-            opacity: curvedValue,
-            child: child,
-          ),
+          child: Opacity(opacity: curvedValue, child: child),
         );
       },
       child: child,
@@ -208,50 +208,33 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      decoration: BoxDecoration(gradient: gradient),
+      decoration: BoxDecoration(
+        borderRadius: AppTheme.radiusHeaderGradient,
+        gradient: gradient,
+      ),
       child: Stack(
         children: [
           // Animated Background Elements
           Positioned(
             top: 32.h,
             right: -40.w,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
+            child: _AnimatedBackgroundIcon(
+              iconName: widget.weather.icon,
+              size: 180.w,
               duration: const Duration(seconds: 8),
-              curve: Curves.easeInOut,
-              builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(
-                    math.sin(value * 2 * math.pi) * 20,
-                    math.cos(value * 2 * math.pi) * 10,
-                  ),
-                  child: Opacity(
-                    opacity: 0.1,
-                    child: _buildWeatherIconWhite(widget.weather.icon, 180.w),
-                  ),
-                );
-              },
+              offsetX: 20,
+              offsetY: 10,
             ),
           ),
           Positioned(
             bottom: 0,
             left: -40.w,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
+            child: _AnimatedBackgroundIcon(
+              iconName: widget.weather.icon,
+              size: 140.w,
               duration: const Duration(seconds: 10),
-              curve: Curves.easeInOut,
-              builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(
-                    -math.sin(value * 2 * math.pi) * 20,
-                    -math.cos(value * 2 * math.pi) * 10,
-                  ),
-                  child: Opacity(
-                    opacity: 0.1,
-                    child: _buildWeatherIconWhite(widget.weather.icon, 140.w),
-                  ),
-                );
-              },
+              offsetX: -20,
+              offsetY: -10,
             ),
           ),
 
@@ -328,7 +311,7 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                                     ],
                                   ),
                                   Text(
-                                    widget.weather.location,
+                                    widget.weather.country,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -379,7 +362,9 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                                   child: Text(
                                     '°C',
                                     style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.6),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       fontSize: 40.sp,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -396,7 +381,10 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                             delay: const Duration(milliseconds: 400),
                             child: Row(
                               children: [
-                                _buildWeatherIconWhite(widget.weather.icon, 24.w),
+                                _buildWeatherIconWhite(
+                                  widget.weather.icon,
+                                  24.w,
+                                ),
                                 SizedBox(width: 8.w),
                                 Text(
                                   widget.weather.description,
@@ -456,20 +444,20 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                                   ),
                                 ),
                                 SizedBox(width: 12.w),
-                                Text(
-                                  '•',
-                                  style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.6),
-                                  ),
-                                ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  'UV: ${widget.weather.uvIndex}/11',
-                                  style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.6),
-                                    fontSize: 14.sp,
-                                  ),
-                                ),
+                                // Text(
+                                //   '•',
+                                //   style: TextStyle(
+                                //     color: Colors.white.withValues(alpha: 0.6),
+                                //   ),
+                                // ),
+                                // SizedBox(width: 12.w),
+                                // Text(
+                                //     'UV: ${widget.weather.uvIndex}/11',
+                                //   style: TextStyle(
+                                //     color: Colors.white.withValues(alpha: 0.6),
+                                //     fontSize: 14.sp,
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -486,8 +474,14 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                         curve: Curves.easeInOut,
                         builder: (context, value, child) {
                           return Transform.translate(
-                            offset: Offset(0, math.sin(value * 2 * math.pi) * 8),
-                            child: _buildWeatherIconWhite(widget.weather.icon, 100.w),
+                            offset: Offset(
+                              0,
+                              math.sin(value * 2 * math.pi) * 8,
+                            ),
+                            child: _buildWeatherIconWhite(
+                              widget.weather.icon,
+                              100.w,
+                            ),
                           );
                         },
                       ),
@@ -526,9 +520,9 @@ class _WeatherHeaderSectionState extends State<WeatherHeaderSection> {
                       child: _buildSlideFromBottom(
                         delay: const Duration(milliseconds: 900),
                         child: QuickStatCard(
-                          icon: Icons.visibility,
-                          label: l10n.visibility,
-                          value: '${widget.weather.visibility.toInt()}km',
+                          icon: Icons.wb_sunny,
+                          label: "UV",
+                          value: '${widget.weather.uvIndex}/11',
                         ),
                       ),
                     ),
@@ -610,12 +604,123 @@ class QuickStatCard extends StatelessWidget {
             value,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Widget cho animated background icon chạy liên tục
+class _AnimatedBackgroundIcon extends StatefulWidget {
+  final String iconName;
+  final double size;
+  final Duration duration;
+  final double offsetX;
+  final double offsetY;
+
+  const _AnimatedBackgroundIcon({
+    required this.iconName,
+    required this.size,
+    required this.duration,
+    required this.offsetX,
+    required this.offsetY,
+  });
+
+  @override
+  State<_AnimatedBackgroundIcon> createState() => _AnimatedBackgroundIconState();
+}
+
+class _AnimatedBackgroundIconState extends State<_AnimatedBackgroundIcon>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
+    
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    _controller.repeat(); // Chạy liên tục
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget _buildWeatherIconWhite(String iconName, double size) {
+    IconData iconData;
+
+    switch (iconName.toLowerCase()) {
+      case 'sunny':
+      case 'clear':
+        iconData = Icons.wb_sunny;
+        break;
+      case 'partly_cloudy':
+        iconData = Icons.wb_cloudy;
+        break;
+      case 'cloudy':
+        iconData = Icons.cloud;
+        break;
+      case 'rainy':
+      case 'rain':
+        iconData = Icons.grain;
+        break;
+      case 'stormy':
+      case 'storm':
+      case 'thunderstorm':
+        iconData = Icons.flash_on;
+        break;
+      case 'foggy':
+      case 'fog':
+        iconData = Icons.filter_drama;
+        break;
+      case 'snowy':
+      case 'snow':
+        iconData = Icons.ac_unit;
+        break;
+      default:
+        iconData = Icons.wb_sunny;
+    }
+
+    return Icon(
+      iconData,
+      size: size,
+      color: Colors.white,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(
+            math.sin(_animation.value * 2 * math.pi) * widget.offsetX,
+            math.cos(_animation.value * 2 * math.pi) * widget.offsetY,
+          ),
+          child: Opacity(
+            opacity: 0.1,
+            child: _buildWeatherIconWhite(widget.iconName, widget.size),
+          ),
+        );
+      },
     );
   }
 }

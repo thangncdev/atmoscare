@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/entities/location_entity.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../models/location_model.dart';
+import '../utils/location_exceptions.dart';
 
 /// Implementation của LocationRepository
 class LocationRepositoryImpl implements LocationRepository {
@@ -48,28 +49,33 @@ class LocationRepositoryImpl implements LocationRepository {
   @override
   Future<LocationEntity?> getCurrentLocation() async {
     try {
-      // Kiểm tra quyền truy cập vị trí
+      // Kiểm tra dịch vụ vị trí có bật không
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        throw Exception('Location services are disabled');
+        throw AppLocationServiceDisabledException();
       }
 
+      // Kiểm tra quyền truy cập vị trí
       LocationPermission permission = await Geolocator.checkPermission();
+      
+      // Nếu chưa có quyền, yêu cầu quyền
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw Exception('Location permissions are denied');
+          throw AppLocationPermissionDeniedException();
         }
       }
 
+      // Nếu bị từ chối vĩnh viễn, cần mở settings
       if (permission == LocationPermission.deniedForever) {
-        throw Exception(
-            'Location permissions are permanently denied, we cannot request permissions.');
+        throw AppLocationPermissionDeniedForeverException();
       }
 
       // Lấy vị trí hiện tại
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium,
+        ),
       );
 
       // Reverse geocoding để lấy tên địa điểm thực tế
@@ -86,7 +92,7 @@ class LocationRepositoryImpl implements LocationRepository {
           },
           options: Options(
             headers: {
-              'User-Agent': 'AtmosCare Weather App',
+              'User-Agent': 'Atmos Care Weather App',
             },
           ),
         );
@@ -136,6 +142,12 @@ class LocationRepositoryImpl implements LocationRepository {
         longitude: position.longitude,
         elevation: position.altitude,
       );
+    } on AppLocationServiceDisabledException {
+      rethrow;
+    } on AppLocationPermissionDeniedException {
+      rethrow;
+    } on AppLocationPermissionDeniedForeverException {
+      rethrow;
     } catch (e) {
       throw Exception('Failed to get current location: $e');
     }

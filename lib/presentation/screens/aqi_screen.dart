@@ -2,11 +2,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/aqi_provider.dart';
+import '../providers/notification_provider.dart';
 import '../providers/locale_provider.dart';
 import '../core/theme.dart';
 import '../core/screen_util_helper.dart';
 import '../../l10n/app_localizations.dart';
 import '../../data/utils/aqi_helper.dart';
+import '../widgets/skeleton_loading.dart';
 
 /// Màn hình chất lượng không khí
 class AQIScreen extends ConsumerStatefulWidget {
@@ -38,7 +40,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
   @override
   Widget build(BuildContext context) {
     final aqiAsync = ref.watch(currentAQIProvider);
-    final alertEnabled = ref.watch(aqiAlertEnabledProvider);
+    final notificationState = ref.watch(notificationEnabledProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -52,12 +54,10 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               // Header với gradient
-              SliverToBoxAdapter(
-                child: _buildHeader(context, aqi, l10n),
-              ),
+              SliverToBoxAdapter(child: _buildHeader(context, aqi, l10n)),
               // Content sections
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: AppTheme.paddingScreen,
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     SizedBox(height: 16.h),
@@ -65,7 +65,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                     SizedBox(height: 24.h),
                     _buildPollutants(context, aqi, l10n),
                     SizedBox(height: 24.h),
-                    _buildAlertSwitch(context, alertEnabled, ref, l10n),
+                    _buildAlertSwitch(context, notificationState, ref, l10n),
                     SizedBox(height: 24.h),
                     _buildAQIScale(context, l10n),
                     SizedBox(height: 24.h),
@@ -75,10 +75,8 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
             ],
           ),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Text('Lỗi: ${err.toString()}'),
-        ),
+        loading: () => const AQIScreenSkeleton(),
+        error: (err, stack) => Center(child: Text('Lỗi: ${err.toString()}')),
       ),
     );
   }
@@ -89,6 +87,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
 
     return Container(
       decoration: BoxDecoration(
+        borderRadius: AppTheme.radiusHeaderGradient,
         gradient: AppTheme.skyGradient,
       ),
       child: Stack(
@@ -96,28 +95,15 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
           // Animated particles
           ...List.generate(5, (index) {
             return Positioned(
-              left: ((20 + index * 15) / 100 * MediaQuery.of(context).size.width),
-              top: ((30 + index * 10) / 100 * MediaQuery.of(context).size.height),
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: 1.0),
+              left:
+                  ((20 + index * 15) / 100 * MediaQuery.of(context).size.width),
+              top:
+                  ((30 + index * 10) /
+                  100 *
+                  MediaQuery.of(context).size.height),
+              child: _AnimatedParticle(
                 duration: Duration(seconds: 3 + index),
-                curve: Curves.easeInOut,
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, math.sin(value * 2 * math.pi) * 20),
-                    child: Opacity(
-                      opacity: (0.2 + (math.sin(value * 2 * math.pi) * 0.3)).clamp(0.0, 1.0),
-                      child: Container(
-                        width: 8.w,
-                        height: 8.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                delay: Duration(milliseconds: index * 200),
               ),
             );
           }),
@@ -130,16 +116,17 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                 // Title
                 Row(
                   children: [
-                    Text(
-                      l10n.airQuality,
-                      style: AppTheme.headerTitle,
-                    ),
+                    Text(l10n.airQuality, style: AppTheme.headerTitle),
                   ],
                 ),
                 SizedBox(height: 8.h),
-                Text(
-                  l10n.aqiAndPollutantsIndex,
-                  style: AppTheme.headerSubtitle,
+                Row(
+                  children: [
+                    Text(
+                      l10n.aqiAndPollutantsIndex,
+                      style: AppTheme.headerSubtitle,
+                    ),
+                  ],
                 ),
                 SizedBox(height: 32.h),
 
@@ -151,10 +138,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                   builder: (context, value, child) {
                     return Transform.scale(
                       scale: 0.8 + (value * 0.2),
-                      child: Opacity(
-                        opacity: value,
-                        child: child,
-                      ),
+                      child: Opacity(opacity: value, child: child),
                     );
                   },
                   child: SizedBox(
@@ -199,8 +183,12 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                               return CircularProgressIndicator(
                                 value: progressValue,
                                 strokeWidth: 14.w,
-                                backgroundColor: Colors.white.withValues(alpha: 0.2),
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                backgroundColor: Colors.white.withValues(
+                                  alpha: 0.2,
+                                ),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                                 strokeCap: StrokeCap.round,
                               );
                             },
@@ -262,7 +250,10 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 12.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: AppTheme.radius2xl,
@@ -292,29 +283,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                     fontSize: 16.sp,
                   ),
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  l10n.updateTime(aqi.updateTime),
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontSize: 12.sp,
-                  ),
-                ),
               ],
-            ),
-          ),
-
-          // Curved bottom border
-          Positioned(
-            bottom: -1,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 32.h,
-              decoration: BoxDecoration(
-                color: AppTheme.backgroundColor,
-                borderRadius: AppTheme.curvedBottom,
-              ),
             ),
           ),
         ],
@@ -330,9 +299,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
       decoration: BoxDecoration(
         color: AppTheme.surface,
         borderRadius: AppTheme.radius2xl,
-        border: Border(
-          left: BorderSide(color: aqiColor, width: 4),
-        ),
+        border: Border(left: BorderSide(color: aqiColor, width: 4)),
         boxShadow: AppTheme.shadowMd,
       ),
       child: Column(
@@ -347,11 +314,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                   color: aqiColor.withValues(alpha: 0.2),
                   borderRadius: AppTheme.radiusLg,
                 ),
-                child: Icon(
-                  Icons.info_outline,
-                  color: aqiColor,
-                  size: 20.w,
-                ),
+                child: Icon(Icons.info_outline, color: aqiColor, size: 20.w),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -433,7 +396,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
 
   Widget _buildPollutants(BuildContext context, aqi, l10n) {
     return Container(
-      padding: EdgeInsets.all(24.w),
+      padding: AppTheme.paddingScreen,
       decoration: BoxDecoration(
         color: AppTheme.surface,
         borderRadius: AppTheme.radius2xl,
@@ -487,11 +450,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                         color: pollutantColor.withValues(alpha: 0.2),
                         borderRadius: AppTheme.radiusLg,
                       ),
-                      child: Icon(
-                        icon,
-                        color: pollutantColor,
-                        size: 24.w,
-                      ),
+                      child: Icon(icon, color: pollutantColor, size: 24.w),
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
@@ -500,30 +459,36 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                         children: [
                           Row(
                             children: [
-                              Text(
-                                pollutant.name,
-                                style: TextStyle(
-                                  color: AppTheme.textPrimary,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
+                              Flexible(
+                                child: Text(
+                                  pollutant.name,
+                                  style: TextStyle(
+                                    color: AppTheme.textPrimary,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               SizedBox(width: 8.w),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8.w,
-                                  vertical: 4.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: pollutantColor.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(12.r),
-                                ),
-                                child: Text(
-                                  pollutant.status,
-                                  style: TextStyle(
-                                    color: pollutantColor,
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w600,
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                    vertical: 4.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: pollutantColor.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Text(
+                                    pollutant.status,
+                                    style: TextStyle(
+                                      color: pollutantColor,
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
@@ -564,7 +529,20 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
 
   Widget _buildAlertSwitch(
     BuildContext context,
-    bool alertEnabled,
+    AsyncValue<bool> notificationState,
+    WidgetRef ref,
+    l10n,
+  ) {
+    return notificationState.when(
+      data: (enabled) => _buildAlertSwitchContent(context, enabled, ref, l10n),
+      loading: () => _buildAlertSwitchContent(context, false, ref, l10n),
+      error: (_, __) => _buildAlertSwitchContent(context, false, ref, l10n),
+    );
+  }
+
+  Widget _buildAlertSwitchContent(
+    BuildContext context,
+    bool enabled,
     WidgetRef ref,
     l10n,
   ) {
@@ -581,16 +559,14 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
             width: 48.w,
             height: 48.w,
             decoration: BoxDecoration(
-              color: alertEnabled
-                  ? AppTheme.primary100
-                  : AppTheme.border,
+              color: enabled ? AppTheme.primary100 : AppTheme.border,
               borderRadius: AppTheme.radiusLg,
             ),
             child: Icon(
-              alertEnabled ? Icons.notifications_active : Icons.notifications_off,
-              color: alertEnabled
-                  ? AppTheme.primary700
-                  : AppTheme.textTertiary,
+              enabled
+                  ? Icons.notifications_active
+                  : Icons.notifications_off,
+              color: enabled ? AppTheme.primary700 : AppTheme.textTertiary,
               size: 24.w,
             ),
           ),
@@ -618,18 +594,17 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
               ],
             ),
           ),
+          
           GestureDetector(
             onTap: () {
-              ref.read(aqiAlertEnabledProvider.notifier).setEnabled(!alertEnabled);
+              ref.read(notificationEnabledProvider.notifier).toggle();
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               width: 56.w,
               height: 32.h,
               decoration: BoxDecoration(
-                color: alertEnabled
-                    ? AppTheme.primaryColor
-                    : AppTheme.border,
+                color: enabled ? AppTheme.primaryColor : AppTheme.border,
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Stack(
@@ -637,7 +612,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                   AnimatedPositioned(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeOut,
-                    left: alertEnabled ? 28.w : 4.w,
+                    left: enabled ? 28.w : 4.w,
                     top: 4.h,
                     child: Container(
                       width: 24.w,
@@ -664,32 +639,32 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
       {
         'range': '0-50',
         'status': AQIHelper.getAQIStatus(25, locale: locale),
-        'color': AppTheme.aqiGood
+        'color': AppTheme.aqiGood,
       },
       {
         'range': '51-100',
         'status': AQIHelper.getAQIStatus(75, locale: locale),
-        'color': AppTheme.aqiModerate
+        'color': AppTheme.aqiModerate,
       },
       {
         'range': '101-150',
         'status': AQIHelper.getAQIStatus(125, locale: locale),
-        'color': AppTheme.aqiUnhealthySensitive
+        'color': AppTheme.aqiUnhealthySensitive,
       },
       {
         'range': '151-200',
         'status': AQIHelper.getAQIStatus(175, locale: locale),
-        'color': AppTheme.aqiUnhealthy
+        'color': AppTheme.aqiUnhealthy,
       },
       {
         'range': '201-300',
         'status': AQIHelper.getAQIStatus(250, locale: locale),
-        'color': AppTheme.aqiVeryUnhealthy
+        'color': AppTheme.aqiVeryUnhealthy,
       },
       {
         'range': '301+',
         'status': AQIHelper.getAQIStatus(350, locale: locale),
-        'color': AppTheme.aqiHazardous
+        'color': AppTheme.aqiHazardous,
       },
     ];
 
@@ -758,14 +733,17 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
   IconData _getPollutantIcon(String name) {
     switch (name) {
       case 'PM2.5':
+        return Icons.grain; // Bụi mịn PM2.5
       case 'PM10':
-        return Icons.water_drop;
+        return Icons.cloud; // Bụi thô PM10
       case 'CO':
+        return Icons.local_fire_department; // Carbon monoxide từ đốt cháy
       case 'SO₂':
-        return Icons.air;
+        return Icons.warning; // Sulfur dioxide - khí độc
       case 'NO₂':
+        return Icons.directions_car; // Nitrogen dioxide từ xe cộ
       case 'O₃':
-        return Icons.show_chart;
+        return Icons.wb_sunny; // Ozone liên quan đến ánh sáng mặt trời
       default:
         return Icons.air;
     }
@@ -779,11 +757,94 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
       case 'Trung bình':
       case 'Moderate':
         return AppTheme.aqiModerate;
-      case 'Kém':
-      case 'Poor':
+      case 'Không tốt':
+      case 'Unhealthy for Sensitive':
+      case 'Unhealthy for Sensitive Groups':
+        return AppTheme.aqiUnhealthySensitive;
+      case 'Xấu':
+      case 'Unhealthy':
         return AppTheme.aqiUnhealthy;
+      case 'Rất xấu':
+      case 'Very Unhealthy':
+        return AppTheme.aqiVeryUnhealthy;
+      case 'Nguy hại':
+      case 'Hazardous':
+        return AppTheme.aqiHazardous;
       default:
         return AppTheme.aqiGood;
     }
+  }
+}
+
+/// Widget cho animated particle chạy liên tục
+class _AnimatedParticle extends StatefulWidget {
+  final Duration duration;
+  final Duration delay;
+
+  const _AnimatedParticle({
+    required this.duration,
+    this.delay = Duration.zero,
+  });
+
+  @override
+  State<_AnimatedParticle> createState() => _AnimatedParticleState();
+}
+
+class _AnimatedParticleState extends State<_AnimatedParticle>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
+    
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Delay trước khi bắt đầu animation
+    Future.delayed(widget.delay, () {
+      if (mounted) {
+        _controller.repeat(); // Chạy liên tục
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, math.sin(_animation.value * 2 * math.pi) * 20),
+          child: Opacity(
+            opacity: (0.2 + (math.sin(_animation.value * 2 * math.pi) * 0.3))
+                .clamp(0.0, 1.0),
+            child: Container(
+              width: 8.w,
+              height: 8.w,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

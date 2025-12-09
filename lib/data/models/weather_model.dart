@@ -9,6 +9,7 @@ class WeatherModel extends WeatherEntity {
     required super.windSpeed,
     required super.windDirection,
     required super.visibility,
+    required super.rain,
     required super.pressure,
     required super.uvIndex,
     required super.condition,
@@ -19,6 +20,7 @@ class WeatherModel extends WeatherEntity {
     required super.sunrise,
     required super.sunset,
     required super.location,
+    required super.country,
     required super.updateTime,
   });
 
@@ -30,6 +32,7 @@ class WeatherModel extends WeatherEntity {
       windSpeed: (json['windSpeed'] as num).toDouble(),
       windDirection: json['windDirection'] as String,
       visibility: (json['visibility'] as num).toDouble(),
+      rain: (json['rain'] as num).toDouble(),
       pressure: (json['pressure'] as num).toDouble(),
       uvIndex: json['uvIndex'] as int,
       condition: json['condition'] as String,
@@ -40,6 +43,7 @@ class WeatherModel extends WeatherEntity {
       sunrise: json['sunrise'] as String,
       sunset: json['sunset'] as String,
       location: json['location'] as String,
+      country: json['country'] as String,
       updateTime: json['updateTime'] as String,
     );
   }
@@ -52,6 +56,7 @@ class WeatherModel extends WeatherEntity {
       'windSpeed': windSpeed,
       'windDirection': windDirection,
       'visibility': visibility,
+      'rain': rain,
       'pressure': pressure,
       'uvIndex': uvIndex,
       'condition': condition,
@@ -62,6 +67,7 @@ class WeatherModel extends WeatherEntity {
       'sunrise': sunrise,
       'sunset': sunset,
       'location': location,
+      'country': country,
       'updateTime': updateTime,
     };
   }

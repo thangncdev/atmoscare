@@ -7,7 +7,9 @@ import 'presentation/core/theme.dart';
 import 'presentation/core/router.dart';
 import 'presentation/providers/locale_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   runApp(
     const ProviderScope(
       child: AirCareApp(),

@@ -61,9 +61,9 @@ class WeatherCodeMapper {
         case 1:
           return 'Chủ yếu quang';
         case 2:
-          return 'Nhiều mây';
+          return 'Có mây';
         case 3:
-          return 'U ám';
+          return 'Nhiều mây';
         case 45:
           return 'Sương mù';
         case 48:

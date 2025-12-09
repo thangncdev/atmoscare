@@ -47,7 +47,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weatherAndAirQuality => 'Weather & Air Quality';
 
   @override
-  String get allRightsReserved => '© 2025 AtmosCare. All rights reserved.';
+  String get allRightsReserved => '© 2025 Atmos Care. All rights reserved.';
 
   @override
   String get language => 'Language';
@@ -180,4 +180,131 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sevenDays => '7 Days';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get uvIndex => 'UV Index';
+
+  @override
+  String get rain => 'Rain';
+
+  @override
+  String get noRain => 'No rain';
+
+  @override
+  String get lightRain => 'Light rain';
+
+  @override
+  String get moderateRain => 'Moderate rain';
+
+  @override
+  String get heavyRain => 'Heavy rain';
+
+  @override
+  String get selectLocation => 'Select location';
+
+  @override
+  String get searchCity => 'Search city...';
+
+  @override
+  String get currentLocation => 'Current location';
+
+  @override
+  String get getCurrentLocationFromGPS => 'Get current location from GPS';
+
+  @override
+  String get enterCityNameToSearch => 'Enter city name to search';
+
+  @override
+  String get locationServiceDisabled => 'Location service disabled';
+
+  @override
+  String get locationServiceDisabledMessage =>
+      'Please enable location services in your device settings to use this feature.';
+
+  @override
+  String get locationPermissionDenied => 'Location permission denied';
+
+  @override
+  String get locationPermissionDeniedMessage =>
+      'We need location permission to show weather for your current location.';
+
+  @override
+  String get locationPermissionDeniedForever => 'Location permission required';
+
+  @override
+  String get locationPermissionDeniedForeverMessage =>
+      'Location permission has been permanently denied. Please enable it in app settings.';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get grantPermission => 'Grant Permission';
+
+  @override
+  String get dailyWeatherReminderTitle => 'Check today\'s weather';
+
+  @override
+  String get dailyWeatherReminderBody =>
+      'Check the weather forecast to plan for a great day!';
+
+  @override
+  String get enableNotificationsTitle => 'Enable Notifications';
+
+  @override
+  String get enableNotificationsMessage =>
+      'Enable notifications to receive alerts about bad weather and poor air quality.';
+
+  @override
+  String get enable => 'Enable';
+
+  @override
+  String get notNow => 'Not Now';
+
+  @override
+  String get tapToLearnMore => 'Tap to learn more';
+
+  @override
+  String get aboutAppContentEnglish =>
+      '🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.';
+
+  @override
+  String get aboutAppContentVietnamese =>
+      '🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.';
+
+  @override
+  String get contactSupport => 'Contact Support';
+
+  @override
+  String get sendEmailForSupport => 'Send email for support';
 }

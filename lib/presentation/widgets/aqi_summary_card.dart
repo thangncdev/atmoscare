@@ -35,16 +35,6 @@ class AQISummaryCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          width: 32.w,
-                          height: 32.w,
-                          decoration: BoxDecoration(
-                            color: aqiColor.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Icon(Icons.air, size: 18.w, color: aqiColor),
-                        ),
-                        SizedBox(width: 8.w),
                         Flexible(
                           child: Text(
                             l10n.airQuality,
@@ -63,36 +53,30 @@ class AQISummaryCard extends StatelessWidget {
                       aqi.status,
                       style: TextStyle(
                         color: aqiColor,
-                        fontSize: 24.sp,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'AQI ${aqi.aqi} • ${l10n.updatedMinutesAgo(10)}',
-                      style: TextStyle(
-                        color: AppTheme.textSecondary,
-                        fontSize: 12.sp,
                       ),
                     ),
                   ],
                 ),
               ),
 
+              SizedBox(width: 12.w),
+
               // Circular AQI Indicator
               SizedBox(
-                width: 112.w,
-                height: 112.w,
+                width: 90.w,
+                height: 90.w,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     // Background circle
                     SizedBox(
-                      width: 112.w,
-                      height: 112.w,
+                      width: 90.w,
+                      height: 90.w,
                       child: CircularProgressIndicator(
                         value: 1.0,
-                        strokeWidth: 10.w,
+                        strokeWidth: 8.w,
                         backgroundColor: AppTheme.divider,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           AppTheme.divider,
@@ -106,11 +90,11 @@ class AQISummaryCard extends StatelessWidget {
                       curve: Curves.easeOut,
                       builder: (context, value, child) {
                         return SizedBox(
-                          width: 112.w,
-                          height: 112.w,
+                          width: 90.w,
+                          height: 90.w,
                           child: CircularProgressIndicator(
                             value: value,
-                            strokeWidth: 10.w,
+                            strokeWidth: 8.w,
                             backgroundColor: Colors.transparent,
                             valueColor: AlwaysStoppedAnimation<Color>(aqiColor),
                             strokeCap: StrokeCap.round,

@@ -1,16 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import '../../../l10n/app_localizations.dart';
-import '../../core/screen_util_helper.dart';
 import '../../core/theme.dart';
 
 /// Widget hiển thị thông tin app ở cuối Settings
-class AppInfoWidget extends StatelessWidget {
+class AppInfoWidget extends StatefulWidget {
   const AppInfoWidget({super.key});
+
+  @override
+  State<AppInfoWidget> createState() => _AppInfoWidgetState();
+}
+
+class _AppInfoWidgetState extends State<AppInfoWidget> {
+  String _version = '1.0.0';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _version = packageInfo.version;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Center(
       child: TweenAnimationBuilder<double>(
         tween: Tween(begin: 0.0, end: 1.0),
@@ -21,33 +54,9 @@ class AppInfoWidget extends StatelessWidget {
             opacity: value,
             child: Column(
               children: [
-                Container(
-                  width: 64.w,
-                  height: 64.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: AppTheme.splashGradient,
-                  ),
-                  child: Icon(
-                    Icons.location_on,
-                    size: 32.w,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 16.h),
                 Text(
-                  'AtmosCare',
-                  style: AppTheme.titleSmall,
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  l10n.weatherAndAirQuality,
+                  _isLoading ? l10n.version('...') : l10n.version(_version),
                   style: AppTheme.settingItemSubtitle,
-                ),
-                SizedBox(height: 24.h),
-                Text(
-                  l10n.allRightsReserved,
-                  style: AppTheme.bodySmall,
                 ),
               ],
             ),
@@ -57,4 +66,3 @@ class AppInfoWidget extends StatelessWidget {
     );
   }
 }
-

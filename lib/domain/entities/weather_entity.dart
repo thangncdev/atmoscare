@@ -6,6 +6,7 @@ class WeatherEntity {
   final double windSpeed;
   final String windDirection;
   final double visibility;
+  final double rain;
   final double pressure;
   final int uvIndex;
   final String condition;
@@ -16,6 +17,7 @@ class WeatherEntity {
   final String sunrise;
   final String sunset;
   final String location;
+  final String country;
   final String updateTime;
 
   const WeatherEntity({
@@ -25,6 +27,7 @@ class WeatherEntity {
     required this.windSpeed,
     required this.windDirection,
     required this.visibility,
+    required this.rain,
     required this.pressure,
     required this.uvIndex,
     required this.condition,
@@ -35,6 +38,7 @@ class WeatherEntity {
     required this.sunrise,
     required this.sunset,
     required this.location,
+    required this.country,
     required this.updateTime,
   });
 }

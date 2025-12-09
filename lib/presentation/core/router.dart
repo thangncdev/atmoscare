@@ -21,10 +21,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       ShellRoute(
         builder: (context, state, child) {
-          return MainNavigationWrapper(
-            location: state.uri.path,
-            child: child,
-          );
+          return MainNavigationWrapper(location: state.uri.path, child: child);
         },
         routes: [
           GoRoute(
@@ -35,10 +32,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/forecast',
             builder: (context, state) => const ForecastScreen(),
           ),
-          GoRoute(
-            path: '/aqi',
-            builder: (context, state) => const AQIScreen(),
-          ),
+          GoRoute(path: '/aqi', builder: (context, state) => const AQIScreen()),
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsScreen(),
@@ -87,19 +81,17 @@ class MainNavigationWrapper extends StatelessWidget {
         },
         selectedItemColor: AppTheme.primaryColor,
         unselectedItemColor: AppTheme.textSecondary,
+        backgroundColor: Colors.white,
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
             label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.calendar_today),
+            icon: const Icon(Icons.timeline),
             label: l10n.forecast,
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.air),
-            label: l10n.aqi,
-          ),
+          BottomNavigationBarItem(icon: const Icon(Icons.air), label: l10n.aqi),
           BottomNavigationBarItem(
             icon: const Icon(Icons.settings),
             label: l10n.settings,
@@ -124,4 +116,3 @@ class MainNavigationWrapper extends StatelessWidget {
     }
   }
 }
-

@@ -117,7 +117,10 @@ class HourlyForecastWidget extends StatelessWidget {
                           curve: Curves.easeInOut,
                           builder: (context, value, child) {
                             return Transform.translate(
-                              offset: Offset(0, math.sin(value * 2 * math.pi) * 4),
+                              offset: Offset(
+                                0,
+                                math.sin(value * 2 * math.pi) * 4,
+                              ),
                               child: child,
                             );
                           },
@@ -133,29 +136,6 @@ class HourlyForecastWidget extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.water_drop,
-                              size: 12.w,
-                              color: AppTheme.primary500,
-                            ),
-                            SizedBox(width: 4.w),
-                            Flexible(
-                              child: Text(
-                                '${hour.rainChance}%',
-                                style: TextStyle(
-                                  color: AppTheme.textTertiary,
-                                  fontSize: 11.sp,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -168,4 +148,3 @@ class HourlyForecastWidget extends StatelessWidget {
     );
   }
 }
-

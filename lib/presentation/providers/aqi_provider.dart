@@ -18,27 +18,3 @@ final currentAQIProvider = FutureProvider<AQIEntity>((ref) async {
   return await repository.getCurrentAQI(location: location, locale: locale);
 });
 
-/// Provider cho trạng thái cảnh báo AQI
-final aqiAlertEnabledProvider =
-    StateNotifierProvider<AQIAlertNotifier, bool>((ref) {
-  return AQIAlertNotifier(ref.watch(aqiRepositoryProvider));
-});
-
-/// Notifier cho quản lý trạng thái cảnh báo AQI
-class AQIAlertNotifier extends StateNotifier<bool> {
-  final AQIRepository _repository;
-
-  AQIAlertNotifier(this._repository) : super(false) {
-    _loadAlertStatus();
-  }
-
-  Future<void> _loadAlertStatus() async {
-    state = await _repository.getAQIAlertEnabled();
-  }
-
-  Future<void> setEnabled(bool enabled) async {
-    await _repository.setAQIAlertEnabled(enabled);
-    state = enabled;
-  }
-}
-

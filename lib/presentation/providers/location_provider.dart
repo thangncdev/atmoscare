@@ -2,22 +2,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/location_entity.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../../data/repositories/location_repository_impl.dart';
+import '../../data/utils/location_exceptions.dart';
 
 /// Provider cho LocationRepository
 final locationRepositoryProvider =
     Provider<LocationRepository>((ref) => LocationRepositoryImpl());
+
+/// Loại lỗi location
+enum LocationErrorType {
+  none,
+  serviceDisabled,
+  permissionDenied,
+  permissionDeniedForever,
+  other,
+}
 
 /// State class cho LocationProvider
 class LocationState {
   final LocationEntity? currentLocation;
   final bool isLoading;
   final String? error;
+  final LocationErrorType errorType;
   final List<LocationEntity> searchResults;
 
   const LocationState({
     this.currentLocation,
     this.isLoading = false,
     this.error,
+    this.errorType = LocationErrorType.none,
     this.searchResults = const [],
   });
 
@@ -25,12 +37,14 @@ class LocationState {
     LocationEntity? currentLocation,
     bool? isLoading,
     String? error,
+    LocationErrorType? errorType,
     List<LocationEntity>? searchResults,
   }) {
     return LocationState(
       currentLocation: currentLocation ?? this.currentLocation,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
+      errorType: errorType ?? this.errorType,
       searchResults: searchResults ?? this.searchResults,
     );
   }
@@ -59,7 +73,11 @@ class LocationNotifier extends StateNotifier<LocationState> {
 
   /// Lấy vị trí hiện tại từ GPS
   Future<void> getCurrentLocation() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      errorType: LocationErrorType.none,
+    );
     try {
       final location = await _repository.getCurrentLocation();
       if (location != null) {
@@ -68,17 +86,38 @@ class LocationNotifier extends StateNotifier<LocationState> {
           currentLocation: location,
           isLoading: false,
           error: null,
+          errorType: LocationErrorType.none,
         );
       } else {
         state = state.copyWith(
           isLoading: false,
           error: 'Không thể lấy vị trí hiện tại',
+          errorType: LocationErrorType.other,
         );
       }
+    } on AppLocationServiceDisabledException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        errorType: LocationErrorType.serviceDisabled,
+      );
+    } on AppLocationPermissionDeniedException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        errorType: LocationErrorType.permissionDenied,
+      );
+    } on AppLocationPermissionDeniedForeverException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        errorType: LocationErrorType.permissionDeniedForever,
+      );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
+        errorType: LocationErrorType.other,
       );
     }
   }
