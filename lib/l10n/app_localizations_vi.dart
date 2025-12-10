@@ -282,7 +282,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get enableNotificationsMessage =>
-      'Bật thông báo để nhận cảnh báo về thời tiết xấu và chất lượng không khí kém.';
+      'Nhận cảnh báo về thời tiết và chất lượng không khí xấu.';
 
   @override
   String get enable => 'Bật';
@@ -295,11 +295,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get aboutAppContentEnglish =>
-      '🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.';
+      'This app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.';
 
   @override
   String get aboutAppContentVietnamese =>
-      '🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.';
+      'Ứng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.';
 
   @override
   String get contactSupport => 'Liên hệ hỗ trợ';
@@ -330,4 +330,11 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get errorLoadingForecastMessage =>
       'Chúng tôi không thể lấy thông tin dự báo. Vui lòng kiểm tra kết nối internet và thử lại.';
+
+  @override
+  String get notificationPermissionDenied => 'Cần quyền thông báo';
+
+  @override
+  String get notificationPermissionDeniedMessage =>
+      'Quyền thông báo đã bị từ chối. Vui lòng bật trong cài đặt ứng dụng để nhận cảnh báo thời tiết và chất lượng không khí.';
 }

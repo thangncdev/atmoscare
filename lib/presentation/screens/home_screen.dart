@@ -1,3 +1,4 @@
+import 'package:atmoscare/data/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,54 +26,34 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  bool _hasShownDialog = false;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndShowNotificationDialog();
+      checkAndShowNotificationDialog();
     });
   }
 
-  Future<void> _checkAndShowNotificationDialog() async {
-    if (_hasShownDialog) return;
-    
-    final notificationService = ref.read(notificationServiceProvider);
-    
-    // Kiểm tra xem đã request permission chưa
-    final hasRequested = await notificationService.hasRequestedPermission();
-    if (hasRequested) {
-      _hasShownDialog = true;
+  Future<void> checkAndShowNotificationDialog() async {
+    final isShowedDialogRequestNoti = await NotificationService()
+        .isShowedDialogRequestNoti();
+    if (isShowedDialogRequestNoti) {
       return;
     }
-
-    // Kiểm tra permission status
-    final hasPermission = await notificationService.checkPermissionStatus();
-    if (hasPermission) {
-      await notificationService.markPermissionRequested();
-      _hasShownDialog = true;
-      return;
-    }
-
-    // Hiện dialog
-    if (mounted && !_hasShownDialog) {
-      _hasShownDialog = true;
-      _showNotificationPermissionDialog();
+    if (mounted) {
+      showNotificationPermissionDialog(context);
+      await NotificationService().setShowedDialogRequestNoti();
     }
   }
 
-  void _showNotificationPermissionDialog() {
+  void showNotificationPermissionDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final notificationService = ref.read(notificationServiceProvider);
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: AppTheme.radius2xl,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppTheme.radius2xl),
         title: Text(
           l10n.enableNotificationsTitle,
           style: TextStyle(
@@ -83,10 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         content: Text(
           l10n.enableNotificationsMessage,
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: AppTheme.textSecondary,
-          ),
+          style: TextStyle(fontSize: 14.sp, color: AppTheme.textSecondary),
         ),
         actions: [
           TextButton(
@@ -95,25 +73,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
             child: Text(
               l10n.notNow,
-              style: TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 14.sp,
-              ),
+              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14.sp),
             ),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.of(dialogContext).pop();
-              // Khởi tạo notification service trước khi request permission
-              await notificationService.initialize();
-              final granted = await notificationService.requestPermission();
-              if (granted && mounted) {
-                // Bật notification và lên lịch thông báo
-                await notificationService.setNotificationEnabled(true);
-                await notificationService.scheduleDailyReminder();
-                // Cập nhật provider state
-                ref.read(notificationEnabledProvider.notifier).setEnabled(true);
-              }
+              await NotificationService().initialize();
+              ref.read(notificationEnabledProvider.notifier).loadEnabled();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryColor,
@@ -124,10 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             child: Text(
               l10n.enable,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -184,6 +148,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         error: (_, __) => _buildAQIError(context),
                       ),
 
+                      // TextButton(
+                      //   onPressed: () {
+                      //     NotificationService().initialize();
+                      //   },
+                      //   child: Text('Initialize Notification'),
+                      // ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     NotificationService().showTestNotification();
+                      //   },
+                      //   child: Text('Test Notification'),
+                      // ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     NotificationService().showWeatherAlertNotification();
+                      //   },
+                      //   child: Text('Weather Alert Notification'),
+                      // ),
                       SizedBox(height: 24.h),
 
                       // Sunrise/Sunset
@@ -275,11 +257,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.air_outlined,
-            size: 32.w,
-            color: AppTheme.textSecondary,
-          ),
+          Icon(Icons.air_outlined, size: 32.w, color: AppTheme.textSecondary),
           SizedBox(height: 12.h),
           Text(
             l10n.errorLoadingAQI,
@@ -293,10 +271,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SizedBox(height: 8.h),
           Text(
             l10n.errorLoadingAQIMessage,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: AppTheme.textSecondary,
-            ),
+            style: TextStyle(fontSize: 12.sp, color: AppTheme.textSecondary),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -307,13 +282,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ref.invalidate(currentAQIProvider);
             },
             icon: Icon(Icons.refresh, size: 16.w),
-            label: Text(
-              l10n.retry,
-              style: TextStyle(fontSize: 12.sp),
-            ),
-            style: TextButton.styleFrom(
-              foregroundColor: AppTheme.primaryColor,
-            ),
+            label: Text(l10n.retry, style: TextStyle(fontSize: 12.sp)),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.primaryColor),
           ),
         ],
       ),

@@ -108,18 +108,18 @@
   "dailyWeatherReminderTitle": "Kiểm tra thời tiết hôm nay",
   "dailyWeatherReminderBody": "Hãy xem dự báo thời tiết để có kế hoạch cho một ngày tốt đẹp!",
   "enableNotificationsTitle": "Bật thông báo",
-  "enableNotificationsMessage": "Bật thông báo để nhận cảnh báo về thời tiết xấu và chất lượng không khí kém.",
+  "enableNotificationsMessage": "Nhận cảnh báo về thời tiết và chất lượng không khí xấu.",
   "enable": "Bật",
   "notNow": "Không phải bây giờ",
   "tapToLearnMore": "Nhấn để tìm hiểu thêm",
   "@tapToLearnMore": {
     "description": "About app subtitle"
   },
-  "aboutAppContentVietnamese": "🇻🇳 About App (Tiếng Việt)\n\nỨng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.",
+  "aboutAppContentVietnamese": "Ứng dụng được tạo ra với mong muốn trở thành người bạn đồng hành đáng tin cậy trong cuộc sống hằng ngày của bạn. Không chỉ cung cấp thông tin thời tiết, chúng tôi còn theo dõi chất lượng không khí theo thời gian thực, giúp bạn chủ động bảo vệ sức khỏe của bản thân và gia đình trước những thay đổi của môi trường.\n\nỨng dụng hoàn toàn miễn phí, được phát triển vì cộng đồng, với mục tiêu đặt sự an toàn và sức khỏe của người dùng lên hàng đầu. Chúng tôi tin rằng, khi hiểu rõ thời tiết và không khí xung quanh, bạn sẽ sống an tâm hơn, chủ động hơn và khỏe mạnh hơn mỗi ngày.",
   "@aboutAppContentVietnamese": {
     "description": "About app content in Vietnamese"
   },
-  "aboutAppContentEnglish": "🇺🇸 About App (English)\n\nThis app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.",
+  "aboutAppContentEnglish": "This app is built with the goal of becoming your trusted daily companion. Beyond weather forecasts, it provides real-time air quality information to help you take better care of your health and stay safe in changing environmental conditions.\n\nThe app is completely free, created for the community with a strong focus on your safety and well-being. We believe that when you truly understand the weather and the air around you, you can live more confidently, proactively, and healthily every day.",
   "@aboutAppContentEnglish": {
     "description": "About app content in English"
   },
@@ -158,6 +158,14 @@
   "errorLoadingForecastMessage": "Chúng tôi không thể lấy thông tin dự báo. Vui lòng kiểm tra kết nối internet và thử lại.",
   "@errorLoadingForecastMessage": {
     "description": "Error message description for forecast loading failure"
+  },
+  "notificationPermissionDenied": "Cần quyền thông báo",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied title"
+  },
+  "notificationPermissionDeniedMessage": "Quyền thông báo đã bị từ chối. Vui lòng bật trong cài đặt ứng dụng để nhận cảnh báo thời tiết và chất lượng không khí.",
+  "@notificationPermissionDeniedMessage": {
+    "description": "Notification permission denied message"
   }
 }
 

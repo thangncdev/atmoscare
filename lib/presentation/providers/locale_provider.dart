@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../data/services/notification_service.dart';
 
 /// Provider для управления языком приложения
 final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
@@ -9,8 +8,6 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
 });
 
 class LocaleNotifier extends StateNotifier<Locale> {
-  final NotificationService _notificationService = NotificationService();
-
   LocaleNotifier() : super(const Locale('vi')) {
     _loadLocale();
   }
@@ -20,8 +17,6 @@ class LocaleNotifier extends StateNotifier<Locale> {
     final prefs = await SharedPreferences.getInstance();
     final languageCode = prefs.getString('language_code') ?? 'vi';
     state = Locale(languageCode);
-    // Đồng bộ locale với notification service
-    await _notificationService.setLocale(languageCode);
   }
 
   /// Устанавливает язык и сохраняет его
@@ -29,21 +24,13 @@ class LocaleNotifier extends StateNotifier<Locale> {
     state = locale;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language_code', locale.languageCode);
-    // Đồng bộ locale với notification service
-    await _notificationService.setLocale(locale.languageCode);
-    // Cập nhật lại notification nếu đang bật
-    final isEnabled = await _notificationService.isNotificationEnabled();
-    if (isEnabled) {
-      await _notificationService.scheduleDailyReminder();
-    }
   }
 
   /// Переключает язык между vi и en
   Future<void> toggleLanguage() async {
-    final newLocale = state.languageCode == 'vi' 
-        ? const Locale('en') 
+    final newLocale = state.languageCode == 'vi'
+        ? const Locale('en')
         : const Locale('vi');
     await setLocale(newLocale);
   }
 }
-

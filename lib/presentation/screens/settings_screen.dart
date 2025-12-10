@@ -91,7 +91,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             children: [
               // Header
               Container(
-                padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 16.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -139,7 +139,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               // Footer
               Padding(
-                padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 24.h),
+                padding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -147,7 +147,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary500,
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
@@ -194,7 +194,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   data: (enabled) => NotificationItem(
                     enabled: enabled,
                     onToggle: () {
-                      ref.read(notificationEnabledProvider.notifier).toggle();
+                      ref.read(notificationEnabledProvider.notifier).toggle(context: context);
                     },
                     delay: 0.35,
                   ),
@@ -206,7 +206,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   error: (_, __) => NotificationItem(
                     enabled: false,
                     onToggle: () {
-                      ref.read(notificationEnabledProvider.notifier).toggle();
+                      ref.read(notificationEnabledProvider.notifier).toggle(context: context);
                     },
                     delay: 0.35,
                   ),

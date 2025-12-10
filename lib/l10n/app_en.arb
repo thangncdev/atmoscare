@@ -422,6 +422,14 @@
   "errorLoadingForecastMessage": "We couldn't fetch the forecast information. Please check your internet connection and try again.",
   "@errorLoadingForecastMessage": {
     "description": "Error message description for forecast loading failure"
+  },
+  "notificationPermissionDenied": "Notification Permission Required",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied title"
+  },
+  "notificationPermissionDeniedMessage": "Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.",
+  "@notificationPermissionDeniedMessage": {
+    "description": "Notification permission denied message"
   }
 }
 

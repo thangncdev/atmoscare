@@ -331,4 +331,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorLoadingForecastMessage =>
       'We couldn\'t fetch the forecast information. Please check your internet connection and try again.';
+
+  @override
+  String get notificationPermissionDenied => 'Notification Permission Required';
+
+  @override
+  String get notificationPermissionDeniedMessage =>
+      'Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.';
 }

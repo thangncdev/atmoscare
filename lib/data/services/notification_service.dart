@@ -1,10 +1,73 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:dio/dio.dart';
+import '../../l10n/app_localizations.dart';
+import '../../presentation/core/theme.dart';
+import '../repositories/location_repository_impl.dart';
+import '../utils/aqi_helper.dart';
+import '../utils/weather_code_mapper.dart';
 
-/// Service để quản lý local notifications
+final List<String> dailyNotificationTitlesVietnamese = [
+  'Hôm nay thời tiết thế nào?',
+  'Chào buổi sáng 🌅',
+  'Nhắc bạn xem thời tiết hôm nay',
+  'Thời tiết hôm nay đã sẵn sàng!',
+  'Kiểm tra thời tiết trước khi ra ngoài',
+  'Đừng để thời tiết làm bạn bất ngờ',
+  'Hôm nay bạn đã xem thời tiết chưa?',
+  'Bản tin thời tiết hôm nay',
+  'Thời tiết & sức khỏe hôm nay',
+  'Chuẩn bị cho một ngày mới an toàn',
+];
+
+final List<String> dailyNotificationTitlesEnglish = [
+  'What\'s the weather like today?',
+  'Good morning 🌅',
+  'Remind you to check the weather today',
+  'The weather today is ready!',
+  'Check the weather before going outside',
+  'Don\'t let the weather surprise you',
+  'Have you checked the weather today?',
+  'The weather forecast for today',
+  'Weather & health today',
+  'Prepare for a safe day',
+];
+
+final List<String> dailyNotificationBodiesVietnamese = [
+  'Mở app để xem dự báo thời tiết và chất lượng không khí hôm nay nhé!',
+  'Chỉ mất 10 giây để biết hôm nay nắng, mưa hay UV cao.',
+  'Xem trước thời tiết để chủ động bảo vệ sức khỏe nhé.',
+  'Thời tiết & không khí có thể ảnh hưởng đến bạn hôm nay. Kiểm tra ngay!',
+  'Trước khi ra ngoài, đừng quên kiểm tra nhiệt độ, mưa và chỉ số UV.',
+  'Chuẩn bị ô, áo chống nắng hay khẩu trang từ sớm nhé!',
+  'Một ngày an toàn bắt đầu từ việc xem thời tiết.',
+  'Biết trước thời tiết sẽ giúp bạn thoải mái hơn cả ngày.',
+  'Thói quen nhỏ cho sức khỏe lớn – mở app xem thời tiết ngay!',
+  'Cập nhật nhanh thời tiết hôm nay chỉ với 1 chạm.',
+];
+
+final List<String> dailyNotificationBodiesEnglish = [
+  'Open the app to view the weather forecast and air quality for today!',
+  'It only takes 10 seconds to know if today is sunny, rainy, or UV high.',
+  'Check the weather before going outside to proactively protect your health.',
+  'The weather & air can affect you today. Check now!',
+  'Before going outside, don\'t forget to check the temperature, rain, and UV index.',
+  'Prepare your umbrella, sun protection, or face mask early!',
+  'A safe day starts with checking the weather.',
+  'Knowing the weather will make you more comfortable all day long.',
+  'A small habit for big health – open the app to check the weather now!',
+  'Update the weather for today with just one tap.',
+];
+
+/// Service for managing local notifications
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
   factory NotificationService() => _instance;
@@ -12,241 +75,487 @@ class NotificationService {
 
   final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
-  
-  static const String _notificationEnabledKey = 'notification_enabled';
-  static const String _localeKey = 'app_locale';
-  static const String _permissionRequestedKey = 'notification_permission_requested';
-  static const String _permissionGrantedKey = 'notification_permission_granted';
-  static const int _dailyReminderId = 1;
-  
-  bool _isInitialized = false;
-  bool _timezoneInitialized = false;
 
-  /// Khởi tạo timezone database (nếu chưa khởi tạo)
-  void _ensureTimezoneInitialized() {
-    if (!_timezoneInitialized) {
+  static const String _showDialogRequestNotiKey = 'showDialogRequestNotiKey';
+  static const String _notificationsEnabledKey = 'notifications_enabled';
+  static const int _weatherAlertReminderId = 1;
+  static const int id = 99;
+
+  final Dio _dio = Dio();
+  final LocationRepositoryImpl _locationRepository = LocationRepositoryImpl();
+
+  // Default location: Hanoi
+  static const double _defaultLatitude = 21.0285;
+  static const double _defaultLongitude = 105.8542;
+
+  /// Initialize notification service
+  Future<bool> initialize() async {
+    try {
+      // Initialize timezone
       tz.initializeTimeZones();
-      _timezoneInitialized = true;
+
+      final TimezoneInfo timeZone = await FlutterTimezone.getLocalTimezone();
+
+      tz.setLocalLocation(tz.getLocation(timeZone.identifier));
+
+      // Android initialization settings
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
+
+      // iOS initialization settings
+      const iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      );
+
+      const initSettings = InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
+      );
+
+      await _notifications.initialize(
+        initSettings,
+        onDidReceiveNotificationResponse: _onNotificationTapped,
+      );
+
+      // Request permissions
+      final granted = await _requestPermissions();
+      if (granted) {
+        await setNotificationsEnabled(true);
+        return true;
+      } else {
+        await setNotificationsEnabled(false);
+        return false;
+      }
+    } catch (e) {
+      debugPrint('Error initializing notifications: $e');
+      return false;
     }
   }
 
-  /// Khởi tạo notification service (chỉ khởi tạo một lần)
-  Future<void> initialize() async {
-    if (_isInitialized) return;
-    
-    // Khởi tạo timezone
-    _ensureTimezoneInitialized();
-    
-    // Cấu hình Android
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    
-    // Cấu hình iOS
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: false, // Không request tự động
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-
-    const initSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _notifications.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: _onNotificationTapped,
-    );
-    
-    _isInitialized = true;
-  }
-
-  /// Request permission cho notifications
+  /// Request notification permissions
   Future<bool> _requestPermissions() async {
-    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    
-    if (androidPlugin != null) {
-      final granted = await androidPlugin.requestNotificationsPermission();
+    if (Platform.isIOS) {
+      final granted = await _notifications
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
+      return granted ?? false;
+    } else if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          _notifications
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >();
+
+      final granted = await androidImplementation
+          ?.requestNotificationsPermission();
       return granted ?? false;
     }
-
-    // iOS permission được request trong initialization settings
-    return true;
+    return false;
   }
 
-  /// Kiểm tra xem notification có được bật không
-  Future<bool> isNotificationEnabled() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_notificationEnabledKey) ?? true; // Mặc định là true
-  }
+  /// Show dialog when notification permission is denied
+  /// This should be called when _requestPermissions() returns false
+  Future<void> showPermissionDeniedDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
 
-  /// Bật/tắt notifications
-  Future<void> setNotificationEnabled(bool enabled) async {
-    // Đảm bảo service đã được khởi tạo
-    await initialize();
-    
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_notificationEnabledKey, enabled);
+    if (!context.mounted) return;
 
-    if (enabled) {
-      await scheduleDailyReminder();
-    } else {
-      await cancelDailyReminder();
-    }
-  }
-
-  /// Lấy locale đã lưu
-  Future<String> _getLocale() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_localeKey) ?? 'vi'; // Mặc định là tiếng Việt
-  }
-
-  /// Lưu locale
-  Future<void> setLocale(String locale) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_localeKey, locale);
-  }
-
-  /// Lấy timezone của device
-  tz.Location _getDeviceTimezone() {
-    // Đảm bảo timezone đã được khởi tạo
-    _ensureTimezoneInitialized();
-    
-    try {
-      return tz.local;
-    } catch (e) {
-      // Fallback về timezone mặc định
-      return tz.getLocation('Asia/Ho_Chi_Minh');
-    }
-  }
-
-  /// Lấy notification messages theo locale
-  Future<Map<String, String>> _getNotificationMessages() async {
-    final locale = await _getLocale();
-    
-    if (locale == 'en') {
-      return {
-        'title': 'Check today\'s weather',
-        'body': 'Check the weather forecast to plan for a great day!',
-        'channelName': 'Daily Reminder',
-        'channelDescription': 'Daily weather reminder notifications',
-      };
-    } else {
-      return {
-        'title': 'Kiểm tra thời tiết hôm nay',
-        'body': 'Hãy xem dự báo thời tiết để có kế hoạch cho một ngày!',
-        'channelName': 'Nhắc nhở hàng ngày',
-        'channelDescription': 'Thông báo nhắc nhở kiểm tra thời tiết hàng ngày',
-      };
-    }
-  }
-
-  /// Lên lịch thông báo hàng ngày lúc 7h sáng
-  Future<void> scheduleDailyReminder() async {
-    // Hủy thông báo cũ nếu có
-    await cancelDailyReminder();
-
-    // Lấy timezone của device
-    final location = _getDeviceTimezone();
-    
-    // Lên lịch cho 7h sáng hôm nay hoặc ngày mai nếu đã qua 7h
-    final now = tz.TZDateTime.now(location);
-    var scheduledDate = tz.TZDateTime(
-      location,
-      now.year,
-      now.month,
-      now.day,
-      7,
-      0,
-    );
-
-    // Nếu đã qua 7h hôm nay, lên lịch cho ngày mai
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-
-    // Lấy messages theo locale
-    final messages = await _getNotificationMessages();
-
-    // Lên lịch thông báo lặp lại hàng ngày
-    await _notifications.zonedSchedule(
-      _dailyReminderId,
-      messages['title']!,
-      messages['body']!,
-      scheduledDate,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'daily_reminder',
-          messages['channelName']!,
-          channelDescription: messages['channelDescription']!,
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
-        ),
-        iOS: const DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.notificationPermissionDenied),
+        content: Text(l10n.notificationPermissionDeniedMessage),
+        shape: RoundedRectangleBorder(borderRadius: AppTheme.radius2xl),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              await openAppSettings();
+            },
+            child: Text(l10n.openSettings),
+          ),
+        ],
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time, // Lặp lại mỗi ngày cùng giờ
     );
   }
 
-  /// Hủy thông báo hàng ngày
-  Future<void> cancelDailyReminder() async {
-    await _notifications.cancel(_dailyReminderId);
-  }
-
-  /// Xử lý khi người dùng tap vào notification
+  /// Handle notification tap
   void _onNotificationTapped(NotificationResponse response) {
-    // Có thể navigate đến màn hình cụ thể nếu cần
-    // Hiện tại chỉ cần log
-    print('Notification tapped: ${response.payload}');
+    debugPrint('Notification tapped: ${response.payload}');
+    // Handle navigation if needed
   }
 
-  /// Kiểm tra xem đã request permission chưa
-  Future<bool> hasRequestedPermission() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_permissionRequestedKey) ?? false;
+  /// Check if notifications are enabled
+  Future<bool> areNotificationsEnabled() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_notificationsEnabledKey) ?? false;
+    } catch (e) {
+      debugPrint('Error checking notification status: $e');
+      return true;
+    }
   }
 
-  /// Đánh dấu đã request permission
-  Future<void> markPermissionRequested() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_permissionRequestedKey, true);
+  Future<bool> isShowedDialogRequestNoti() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_showDialogRequestNotiKey) ?? false;
+    } catch (e) {
+      debugPrint('Error checking showed dialog request notification: $e');
+      return true;
+    }
   }
 
-  /// Kiểm tra permission status thực tế từ hệ thống
-  Future<bool> checkPermissionStatus() async {
-    // Check permission thực tế từ hệ thống bằng permission_handler
-    final status = await Permission.notification.status;
-    final isGranted = status.isGranted;
-    
-    // Cập nhật cache để đồng bộ
-    await _savePermissionStatus(isGranted);
-    
-    return isGranted;
+  Future<void> setShowedDialogRequestNoti() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_showDialogRequestNotiKey, true);
+    } catch (e) {
+      debugPrint('Error setting showed dialog request notification: $e');
+    }
   }
 
-  /// Lưu trạng thái permission đã được cấp
-  Future<void> _savePermissionStatus(bool granted) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_permissionGrantedKey, granted);
+  /// Enable or disable notifications
+  Future<void> setNotificationsEnabled(bool enabled, {Locale? locale}) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_notificationsEnabledKey, enabled);
+
+      if (enabled) {
+        await scheduleWeatherAlertReminder(locale: locale);
+      } else {
+        await cancelWeatherAlertReminder();
+      }
+    } catch (e) {
+      debugPrint('Error setting notification status: $e');
+    }
   }
 
-  /// Request permission (gọi khi người dùng đồng ý)
-  Future<bool> requestPermission() async {
-    // Đảm bảo service đã được khởi tạo
-    await initialize();
-    
-    final granted = await _requestPermissions();
-    await markPermissionRequested();
-    await _savePermissionStatus(granted);
-    return granted;
+  /// Fetch weather data for a specific day (0 = today, 1 = tomorrow)
+  Future<Map<String, dynamic>?> _fetchWeatherData({int dayOffset = 0}) async {
+    try {
+      final location = await _locationRepository.getSavedLocation();
+      final lat = location?.latitude ?? _defaultLatitude;
+      final lon = location?.longitude ?? _defaultLongitude;
+
+      // Fetch forecast for the next few days to get the target day
+      final response = await _dio.get(
+        'https://api.open-meteo.com/v1/forecast',
+        queryParameters: {
+          'latitude': lat,
+          'longitude': lon,
+          'daily':
+              'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max',
+          'timeformat': 'unixtime',
+          'timezone': 'auto',
+          'forecast_days':
+              dayOffset + 1, // Fetch enough days to include target day
+        },
+      );
+
+      final data = response.data as Map<String, dynamic>;
+      final daily = data['daily'] as Map<String, dynamic>;
+
+      // Get data for the target day (dayOffset)
+      final index = dayOffset;
+      final weatherCodes = daily['weather_code'] as List;
+      final tempMaxs = daily['temperature_2m_max'] as List;
+      final tempMins = daily['temperature_2m_min'] as List;
+      final uvIndexes = daily['uv_index_max'] as List;
+
+      if (index >= weatherCodes.length) {
+        debugPrint('Day offset $dayOffset is out of range');
+        return null;
+      }
+
+      return {
+        'weather_code': weatherCodes[index] as int,
+        'temp_max': tempMaxs[index] as num,
+        'temp_min': tempMins[index] as num,
+        'uv_index_max': uvIndexes[index] as num,
+      };
+    } catch (e) {
+      debugPrint('Error fetching weather data: $e');
+      return null;
+    }
+  }
+
+  /// Fetch current AQI data
+  Future<int?> _fetchAQIData() async {
+    try {
+      final location = await _locationRepository.getSavedLocation();
+      final lat = location?.latitude ?? _defaultLatitude;
+      final lon = location?.longitude ?? _defaultLongitude;
+
+      final response = await _dio.get(
+        'https://air-quality-api.open-meteo.com/v1/air-quality',
+        queryParameters: {
+          'latitude': lat,
+          'longitude': lon,
+          'timezone': 'auto',
+          'current': 'us_aqi',
+        },
+      );
+
+      final data = response.data as Map<String, dynamic>;
+      final current = data['current'] as Map<String, dynamic>;
+      return (current['us_aqi'] as num?)?.toInt();
+    } catch (e) {
+      debugPrint('Error fetching AQI data: $e');
+      return null;
+    }
+  }
+
+  /// Check if weather code indicates rain
+  bool _isRainy(int weatherCode) {
+    // Weather codes for rain: 51-67 (drizzle/rain), 80-82 (rain showers), 95-99 (thunderstorms)
+    return (weatherCode >= 51 && weatherCode <= 67) ||
+        (weatherCode >= 80 && weatherCode <= 82) ||
+        (weatherCode >= 95 && weatherCode <= 99);
+  }
+
+  /// Generate notification message based on weather conditions
+  Future<Map<String, String>> _generateWeatherAlertMessage(
+    Map<String, dynamic>? weatherData,
+    int? aqi,
+    Locale? locale,
+  ) async {
+    final isVietnamese = locale == null || locale.languageCode == 'vi';
+
+    if (weatherData == null || aqi == null) {
+      return {
+        'title': await _getNotificationTitle(isVietnamese),
+        'body': await _getNotificationBody(isVietnamese),
+      };
+    }
+
+    final weatherCode = weatherData['weather_code'] as int;
+    final tempMin = (weatherData['temp_min'] as num).toDouble();
+    final uvIndex = (weatherData['uv_index_max'] as num).toDouble();
+    final isRain = _isRainy(weatherCode);
+    final isLowTemp = tempMin < 13;
+    final isHighUV = uvIndex > 7;
+    final isHighAQI = aqi > 150;
+
+    // Check for unsafe conditions
+    final List<String> warnings = [];
+
+    if (isHighAQI) {
+      final aqiStatus = AQIHelper.getAQIStatus(aqi, locale: locale);
+      warnings.add(
+        isVietnamese
+            ? 'Chất lượng không khí: $aqiStatus (AQI: $aqi). Hãy đeo khẩu trang khi ra ngoài!'
+            : 'Air quality: $aqiStatus (AQI: $aqi). Please wear a mask when going outside!',
+      );
+    }
+    if (isRain) {
+      warnings.add(
+        isVietnamese
+            ? 'Trời có mưa. Hãy mang ô mưa khi ra ngoài!'
+            : 'Rain expected. Please bring an umbrella when going outside!',
+      );
+    }
+    if (isLowTemp) {
+      warnings.add(
+        isVietnamese
+            ? 'Nhiệt độ thấp nhất $tempMin°C. Hãy giữ ấm khi ra ngoài!'
+            : 'Low temperature ($tempMin°C). Please keep warm when going outside!',
+      );
+    }
+    if (isHighUV) {
+      warnings.add(
+        isVietnamese
+            ? 'Chỉ số UV cao $uvIndex. Hãy tránh đi ngoài trời khi UV cao!'
+            : 'High UV index $uvIndex. Please avoid going outside when UV is high!',
+      );
+    }
+
+    if (warnings.isNotEmpty) {
+      // Unsafe conditions - show warning
+      final title = isVietnamese ? 'Cảnh báo thời tiết' : 'Weather Alert';
+      final body = warnings[0];
+
+      return {'title': title, 'body': body};
+    } else {
+      // Safe conditions - show positive message
+      final title = isVietnamese ? 'Thời tiết hôm nay' : 'Today\'s Weather';
+      final tempMax = (weatherData['temp_max'] as num).toDouble();
+      final weatherDesc = WeatherCodeMapper.getDescriptionFromCode(
+        weatherCode,
+        locale: locale,
+      );
+      final body = isVietnamese
+          ? '$weatherDesc. Nhiệt độ: ${tempMin.toStringAsFixed(0)}-${tempMax.toStringAsFixed(0)}°C. Thời tiết đẹp, phù hợp cho hoạt động ngoài trời!'
+          : '$weatherDesc. Temperature: ${tempMin.toStringAsFixed(0)}-${tempMax.toStringAsFixed(0)}°C. Nice weather, perfect for outdoor activities!';
+
+      return {'title': title, 'body': body};
+    }
+  }
+
+  /// Schedule weather alert reminder that checks weather conditions
+  /// This will fetch weather data and send notification at scheduled time
+  Future<void> scheduleWeatherAlertReminder({Locale? locale}) async {
+    try {
+      // Cancel existing reminder first
+      await cancelWeatherAlertReminder();
+
+      // Schedule for 8 AM daily
+      final scheduledTime = tz.TZDateTime(
+        tz.local,
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        7, // 8 AM
+        0,
+      );
+
+      // If the time has passed today, schedule for tomorrow
+      final now = tz.TZDateTime.now(tz.local);
+      final isTomorrow = scheduledTime.isBefore(now);
+      final timeToSchedule = isTomorrow
+          ? scheduledTime.add(const Duration(days: 1))
+          : scheduledTime;
+
+      // Fetch weather data for the day the notification is scheduled for
+      // dayOffset: 0 = today, 1 = tomorrow
+      final dayOffset = isTomorrow ? 1 : 0;
+      final weatherData = await _fetchWeatherData(dayOffset: dayOffset);
+      final aqi = await _fetchAQIData();
+      final message = await _generateWeatherAlertMessage(
+        weatherData,
+        aqi,
+        locale,
+      );
+
+      // Android notification details
+      const androidDetails = AndroidNotificationDetails(
+        'weather_alert',
+        'Cảnh báo thời tiết',
+        channelDescription:
+            'Thông báo cảnh báo thời tiết và chất lượng không khí',
+        importance: Importance.high,
+        priority: Priority.high,
+        showWhen: false,
+      );
+
+      // iOS notification details
+      const iosDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
+
+      const notificationDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      );
+
+      await _notifications.zonedSchedule(
+        _weatherAlertReminderId,
+        message['title'] ?? 'Weather Alert',
+        message['body'] ?? 'Check today\'s weather conditions',
+        timeToSchedule,
+        notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+
+      debugPrint('Weather alert reminder scheduled for 8 AM');
+    } catch (e) {
+      debugPrint('Error scheduling weather alert reminder: $e');
+    }
+  }
+
+  /// Cancel weather alert reminder
+  Future<void> cancelWeatherAlertReminder() async {
+    try {
+      await _notifications.cancel(_weatherAlertReminderId);
+      debugPrint('Weather alert reminder cancelled');
+    } catch (e) {
+      debugPrint('Error cancelling weather alert reminder: $e');
+    }
+  }
+
+  /// Get notification title based on locale
+  Future<String> _getNotificationTitle(bool isVietnamese) async {
+    return isVietnamese
+        ? dailyNotificationTitlesVietnamese[Random().nextInt(
+            dailyNotificationTitlesVietnamese.length,
+          )]
+        : dailyNotificationTitlesEnglish[Random().nextInt(
+            dailyNotificationTitlesEnglish.length,
+          )];
+  }
+
+  /// Get notification body - check if there are transactions today
+  Future<String> _getNotificationBody(bool isVietnamese) async {
+    return isVietnamese
+        ? dailyNotificationBodiesVietnamese[Random().nextInt(
+            dailyNotificationBodiesVietnamese.length,
+          )]
+        : dailyNotificationBodiesEnglish[Random().nextInt(
+            dailyNotificationBodiesEnglish.length,
+          )];
+  }
+
+  /// Show immediate notification (for testing)
+  Future<void> showTestNotification() async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+    await _notifications.show(
+      id,
+      'plain title',
+      'plain body',
+      notificationDetails,
+      payload: 'item x',
+    );
+  }
+
+  Future<void> showWeatherAlertNotification() async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    final weatherData = await _fetchWeatherData(dayOffset: 0);
+    final aqi = await _fetchAQIData();
+    final message = await _generateWeatherAlertMessage(weatherData, aqi, null);
+
+    await _notifications.show(
+      id,
+      message['title'],
+      message['body'],
+      notificationDetails,
+    );
   }
 }
-

@@ -709,6 +709,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t fetch the forecast information. Please check your internet connection and try again.'**
   String get errorLoadingForecastMessage;
+
+  /// Notification permission denied title
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Permission Required'**
+  String get notificationPermissionDenied;
+
+  /// Notification permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.'**
+  String get notificationPermissionDeniedMessage;
 }
 
 class _AppLocalizationsDelegate

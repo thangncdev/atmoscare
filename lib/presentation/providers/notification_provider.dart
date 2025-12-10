@@ -1,91 +1,56 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/services/notification_service.dart';
+import 'package:atmoscare/data/services/notification_service.dart';
 
 /// Provider cho NotificationService
-final notificationServiceProvider =
-    Provider<NotificationService>((ref) => NotificationService());
+final notificationServiceProvider = Provider<NotificationService>(
+  (ref) => NotificationService(),
+);
 
 /// Provider cho notification enabled state
 final notificationEnabledProvider =
     StateNotifierProvider<NotificationEnabledNotifier, AsyncValue<bool>>((ref) {
-  final service = ref.watch(notificationServiceProvider);
-  return NotificationEnabledNotifier(service);
-});
+      final service = ref.watch(notificationServiceProvider);
+      return NotificationEnabledNotifier(service);
+    });
 
 class NotificationEnabledNotifier extends StateNotifier<AsyncValue<bool>> {
-  final NotificationService _service;
+  final NotificationService notificationService;
 
-  NotificationEnabledNotifier(this._service) : super(const AsyncValue.loading()) {
-    _loadEnabled();
+  NotificationEnabledNotifier(this.notificationService)
+    : super(const AsyncValue.loading()) {
+    loadEnabled();
   }
 
-  Future<void> _loadEnabled() async {
+  Future<void> loadEnabled() async {
     try {
-      final enabled = await _service.isNotificationEnabled();
-      state = AsyncValue.data(enabled);
+      final areNotificationsEnabled = await notificationService
+          .areNotificationsEnabled();
+      state = AsyncValue.data(areNotificationsEnabled);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
   }
 
-  Future<void> toggle() async {
-    // Đảm bảo state đã được load
+  Future<void> toggle({BuildContext? context}) async {
     if (state.isLoading) {
-      await _loadEnabled();
+      await loadEnabled();
     }
-    
-    // Lấy giá trị thực tế từ state hoặc từ service
-    final currentValue = state.value ?? await _service.isNotificationEnabled();
-    final newValue = !currentValue;
-    
-    // Nếu đang bật notification, cần khởi tạo và check permission
-    if (newValue) {
-      await _service.initialize();
-      final hasPermission = await _service.checkPermissionStatus();
-      if (!hasPermission) {
-        // Request permission nếu chưa có
-        final granted = await _service.requestPermission();
-        if (!granted) {
-          // Nếu không được cấp quyền, không bật notification
-          return;
-        }
-      }
-    }
-    
-    // Update state trước
-    state = AsyncValue.data(newValue);
-    
-    try {
-      await _service.setNotificationEnabled(newValue);
-    } catch (e, stackTrace) {
-      // Revert nếu có lỗi
-      state = AsyncValue.data(currentValue);
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
 
-  Future<void> setEnabled(bool enabled) async {
-    // Nếu đang bật notification, cần khởi tạo và check permission
-    if (enabled) {
-      await _service.initialize();
-      final hasPermission = await _service.checkPermissionStatus();
-      if (!hasPermission) {
-        // Request permission nếu chưa có
-        final granted = await _service.requestPermission();
-        if (!granted) {
-          // Nếu không được cấp quyền, không bật notification
-          return;
-        }
+    final currentValue = state.value ?? false;
+    final newValue = !currentValue;
+
+    if (newValue) {
+      bool granted = await notificationService.initialize();
+      state = AsyncValue.data(granted);
+      
+      // Show dialog if permission was denied and context is provided
+      if (!granted && context != null && context.mounted) {
+        await notificationService.showPermissionDeniedDialog(context);
       }
-    }
-    
-    state = AsyncValue.data(enabled);
-    
-    try {
-      await _service.setNotificationEnabled(enabled);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    } else {
+      await notificationService.setNotificationsEnabled(newValue);
+      state = AsyncValue.data(newValue);
     }
   }
 }
-

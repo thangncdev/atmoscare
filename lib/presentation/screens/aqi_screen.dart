@@ -62,13 +62,13 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     SizedBox(height: 16.h),
-                    _buildRecommendations(context, aqi, l10n),
-                    SizedBox(height: 24.h),
-                    _buildPollutants(context, aqi, l10n),
-                    SizedBox(height: 24.h),
                     _buildAlertSwitch(context, notificationState, ref, l10n),
                     SizedBox(height: 24.h),
+                    _buildRecommendations(context, aqi, l10n),
+                    SizedBox(height: 24.h),
                     _buildAQIScale(context, l10n),
+                    SizedBox(height: 24.h),
+                    _buildPollutants(context, aqi, l10n),
                     SizedBox(height: 24.h),
                   ]),
                 ),
@@ -598,7 +598,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
           
           GestureDetector(
             onTap: () {
-              ref.read(notificationEnabledProvider.notifier).toggle();
+              ref.read(notificationEnabledProvider.notifier).toggle(context: context);
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
