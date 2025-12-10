@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
     _startAnimations();
 
     // Navigate to home after delay
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(milliseconds: 1800), () {
       if (mounted) {
         context.go('/home');
       }

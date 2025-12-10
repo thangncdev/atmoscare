@@ -667,6 +667,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send email for support'**
   String get sendEmailForSupport;
+
+  /// Error message when weather data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load weather data'**
+  String get errorLoadingWeather;
+
+  /// Error message description for weather loading failure
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch the weather information. Please check your internet connection and try again.'**
+  String get errorLoadingWeatherMessage;
+
+  /// Error message when AQI data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load air quality data'**
+  String get errorLoadingAQI;
+
+  /// Error message description for AQI loading failure
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch the air quality information. Please check your internet connection and try again.'**
+  String get errorLoadingAQIMessage;
+
+  /// Retry button text
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Error message when forecast data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load forecast'**
+  String get errorLoadingForecast;
+
+  /// Error message description for forecast loading failure
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t fetch the forecast information. Please check your internet connection and try again.'**
+  String get errorLoadingForecastMessage;
 }
 
 class _AppLocalizationsDelegate

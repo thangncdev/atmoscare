@@ -394,6 +394,34 @@
   "sendEmailForSupport": "Send email for support",
   "@sendEmailForSupport": {
     "description": "Contact support setting subtitle"
+  },
+  "errorLoadingWeather": "Unable to load weather data",
+  "@errorLoadingWeather": {
+    "description": "Error message when weather data fails to load"
+  },
+  "errorLoadingWeatherMessage": "We couldn't fetch the weather information. Please check your internet connection and try again.",
+  "@errorLoadingWeatherMessage": {
+    "description": "Error message description for weather loading failure"
+  },
+  "errorLoadingAQI": "Unable to load air quality data",
+  "@errorLoadingAQI": {
+    "description": "Error message when AQI data fails to load"
+  },
+  "errorLoadingAQIMessage": "We couldn't fetch the air quality information. Please check your internet connection and try again.",
+  "@errorLoadingAQIMessage": {
+    "description": "Error message description for AQI loading failure"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "errorLoadingForecast": "Unable to load forecast",
+  "@errorLoadingForecast": {
+    "description": "Error message when forecast data fails to load"
+  },
+  "errorLoadingForecastMessage": "We couldn't fetch the forecast information. Please check your internet connection and try again.",
+  "@errorLoadingForecastMessage": {
+    "description": "Error message description for forecast loading failure"
   }
 }
 

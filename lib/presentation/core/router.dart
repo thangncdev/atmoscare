@@ -88,7 +88,7 @@ class MainNavigationWrapper extends StatelessWidget {
             label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.timeline),
+            icon: const Icon(Icons.wb_sunny),
             label: l10n.forecast,
           ),
           BottomNavigationBarItem(icon: const Icon(Icons.air), label: l10n.aqi),

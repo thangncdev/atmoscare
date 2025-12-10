@@ -115,15 +115,7 @@ class _ForecastHourlyListWidgetState
     return hourlyAsync.when(
       data: (hourly) => _buildContent(context, l10n, hourly),
       loading: () => const ForecastHourlyListSkeleton(),
-      error: (err, stack) => Container(
-        padding: EdgeInsets.all(24.w),
-        decoration: BoxDecoration(
-          color: AppTheme.surface,
-          borderRadius: AppTheme.radius2xl,
-          boxShadow: AppTheme.shadowMd,
-        ),
-        child: Center(child: Text('Lỗi: ${err.toString()}')),
-      ),
+      error: (err, stack) => _buildError(context, l10n),
     );
   }
 
@@ -202,6 +194,103 @@ class _ForecastHourlyListWidgetState
               itemBuilder: (context, index) {
                 return ForecastHourlyItemWidget(hour: hourly[index]);
               },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildError(BuildContext context, l10n) {
+    return Container(
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+        color: AppTheme.surface,
+        borderRadius: widget.showViewDetails
+            ? BorderRadius.circular(28.r)
+            : AppTheme.radius2xl,
+        boxShadow: widget.showViewDetails
+            ? AppTheme.shadowLg
+            : AppTheme.shadowMd,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.showViewDetails)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.hourlyForecast,
+                  style: TextStyle(
+                    color: AppTheme.textPrimary,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (widget.onViewDetails != null)
+                  TextButton(
+                    onPressed: widget.onViewDetails,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.viewDetails,
+                          style: TextStyle(
+                            color: AppTheme.primary500,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Icon(
+                          Icons.arrow_forward,
+                          size: 16.w,
+                          color: AppTheme.primary500,
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          if (widget.showViewDetails) SizedBox(height: 16.h),
+          Icon(
+            Icons.wb_cloudy_outlined,
+            size: 48.w,
+            color: AppTheme.textSecondary,
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            l10n.errorLoadingForecast,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            l10n.errorLoadingForecastMessage,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: AppTheme.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 16.h),
+          TextButton.icon(
+            onPressed: () {
+              ref.invalidate(hourlyForecastProvider);
+            },
+            icon: Icon(Icons.refresh, size: 16.w),
+            label: Text(
+              l10n.retry,
+              style: TextStyle(fontSize: 12.sp),
+            ),
+            style: TextButton.styleFrom(
+              foregroundColor: AppTheme.primaryColor,
             ),
           ),
         ],

@@ -307,4 +307,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendEmailForSupport => 'Send email for support';
+
+  @override
+  String get errorLoadingWeather => 'Unable to load weather data';
+
+  @override
+  String get errorLoadingWeatherMessage =>
+      'We couldn\'t fetch the weather information. Please check your internet connection and try again.';
+
+  @override
+  String get errorLoadingAQI => 'Unable to load air quality data';
+
+  @override
+  String get errorLoadingAQIMessage =>
+      'We couldn\'t fetch the air quality information. Please check your internet connection and try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get errorLoadingForecast => 'Unable to load forecast';
+
+  @override
+  String get errorLoadingForecastMessage =>
+      'We couldn\'t fetch the forecast information. Please check your internet connection and try again.';
 }

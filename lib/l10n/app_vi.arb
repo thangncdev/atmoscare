@@ -130,6 +130,34 @@
   "sendEmailForSupport": "Gửi email để được hỗ trợ",
   "@sendEmailForSupport": {
     "description": "Contact support setting subtitle"
+  },
+  "errorLoadingWeather": "Không thể tải dữ liệu thời tiết",
+  "@errorLoadingWeather": {
+    "description": "Error message when weather data fails to load"
+  },
+  "errorLoadingWeatherMessage": "Chúng tôi không thể lấy thông tin thời tiết. Vui lòng kiểm tra kết nối internet và thử lại.",
+  "@errorLoadingWeatherMessage": {
+    "description": "Error message description for weather loading failure"
+  },
+  "errorLoadingAQI": "Không thể tải dữ liệu chất lượng không khí",
+  "@errorLoadingAQI": {
+    "description": "Error message when AQI data fails to load"
+  },
+  "errorLoadingAQIMessage": "Chúng tôi không thể lấy thông tin chất lượng không khí. Vui lòng kiểm tra kết nối internet và thử lại.",
+  "@errorLoadingAQIMessage": {
+    "description": "Error message description for AQI loading failure"
+  },
+  "retry": "Thử lại",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "errorLoadingForecast": "Không thể tải dự báo",
+  "@errorLoadingForecast": {
+    "description": "Error message when forecast data fails to load"
+  },
+  "errorLoadingForecastMessage": "Chúng tôi không thể lấy thông tin dự báo. Vui lòng kiểm tra kết nối internet và thử lại.",
+  "@errorLoadingForecastMessage": {
+    "description": "Error message description for forecast loading failure"
   }
 }
 

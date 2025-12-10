@@ -12,6 +12,7 @@ import '../widgets/sunrise_sunset_card.dart';
 import '../widgets/weather_detail_card.dart';
 import '../widgets/forecast_hourly_list_widget.dart';
 import '../widgets/skeleton_loading.dart';
+import '../widgets/error_widget.dart';
 import 'location_search_screen.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -180,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       aqiAsync.when(
                         data: (aqi) => AQISummaryCard(aqi: aqi),
                         loading: () => const AQISummaryCardSkeleton(),
-                        error: (_, __) => const SizedBox(),
+                        error: (_, __) => _buildAQIError(context),
                       ),
 
                       SizedBox(height: 24.h),
@@ -217,7 +218,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             ),
             loading: () => _buildSkeletonLoading(),
-            error: (err, stack) => _buildError(context, err.toString()),
+            error: (err, stack) => _buildWeatherError(context),
           ),
         ),
       ),
@@ -250,17 +251,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildError(BuildContext context, String error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 16),
-            Text('Lỗi: $error'),
-          ],
-        ),
+  Widget _buildWeatherError(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return FriendlyErrorWidget(
+      title: l10n.errorLoadingWeather,
+      message: l10n.errorLoadingWeatherMessage,
+      onRetry: () {
+        ref.invalidate(currentWeatherProvider);
+        ref.invalidate(hourlyForecastProvider);
+      },
+      icon: Icons.wb_cloudy_outlined,
+    );
+  }
+
+  Widget _buildAQIError(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      margin: EdgeInsets.only(bottom: 24.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.air_outlined,
+            size: 32.w,
+            color: AppTheme.textSecondary,
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            l10n.errorLoadingAQI,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            l10n.errorLoadingAQIMessage,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: AppTheme.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 12.h),
+          TextButton.icon(
+            onPressed: () {
+              ref.invalidate(currentAQIProvider);
+            },
+            icon: Icon(Icons.refresh, size: 16.w),
+            label: Text(
+              l10n.retry,
+              style: TextStyle(fontSize: 12.sp),
+            ),
+            style: TextButton.styleFrom(
+              foregroundColor: AppTheme.primaryColor,
+            ),
+          ),
+        ],
       ),
     );
   }

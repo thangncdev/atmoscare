@@ -9,6 +9,7 @@ import '../core/screen_util_helper.dart';
 import '../../l10n/app_localizations.dart';
 import '../../data/utils/aqi_helper.dart';
 import '../widgets/skeleton_loading.dart';
+import '../widgets/error_widget.dart';
 
 /// Màn hình chất lượng không khí
 class AQIScreen extends ConsumerStatefulWidget {
@@ -76,7 +77,7 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
           ),
         ),
         loading: () => const AQIScreenSkeleton(),
-        error: (err, stack) => Center(child: Text('Lỗi: ${err.toString()}')),
+        error: (err, stack) => _buildError(context, l10n, ref),
       ),
     );
   }
@@ -773,6 +774,17 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
       default:
         return AppTheme.aqiGood;
     }
+  }
+
+  Widget _buildError(BuildContext context, l10n, WidgetRef ref) {
+    return FriendlyErrorWidget(
+      title: l10n.errorLoadingAQI,
+      message: l10n.errorLoadingAQIMessage,
+      onRetry: () {
+        ref.invalidate(currentAQIProvider);
+      },
+      icon: Icons.air_outlined,
+    );
   }
 }
 

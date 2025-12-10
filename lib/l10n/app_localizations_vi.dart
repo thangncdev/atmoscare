@@ -306,4 +306,28 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get sendEmailForSupport => 'Gửi email để được hỗ trợ';
+
+  @override
+  String get errorLoadingWeather => 'Không thể tải dữ liệu thời tiết';
+
+  @override
+  String get errorLoadingWeatherMessage =>
+      'Chúng tôi không thể lấy thông tin thời tiết. Vui lòng kiểm tra kết nối internet và thử lại.';
+
+  @override
+  String get errorLoadingAQI => 'Không thể tải dữ liệu chất lượng không khí';
+
+  @override
+  String get errorLoadingAQIMessage =>
+      'Chúng tôi không thể lấy thông tin chất lượng không khí. Vui lòng kiểm tra kết nối internet và thử lại.';
+
+  @override
+  String get retry => 'Thử lại';
+
+  @override
+  String get errorLoadingForecast => 'Không thể tải dự báo';
+
+  @override
+  String get errorLoadingForecastMessage =>
+      'Chúng tôi không thể lấy thông tin dự báo. Vui lòng kiểm tra kết nối internet và thử lại.';
 }
