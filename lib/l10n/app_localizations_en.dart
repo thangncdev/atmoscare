@@ -338,4 +338,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationPermissionDeniedMessage =>
       'Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.';
+
+  @override
+  String get healthDisclaimer =>
+      'Recommendations are for reference only, based on WHO/EPA standards. They do not replace professional medical advice.';
+
+  @override
+  String get learnMoreAboutAQI => 'Learn more about AQI';
+
+  @override
+  String get dataSource => 'Data source';
 }

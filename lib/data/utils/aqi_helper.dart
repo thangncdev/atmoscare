@@ -41,8 +41,8 @@ class AQIHelper {
       }
       if (aqi <= 100) {
         return [
-          'Nhóm nhạy cảm nên theo dõi sức khỏe',
           'Có thể hoạt động ngoài trời bình thường',
+          'Nhóm nhạy cảm nên theo dõi sức khỏe',
           'Hạn chế hoạt động quá mức trong thời gian dài',
         ];
       }
@@ -237,6 +237,33 @@ class AQIHelper {
       return isVietnamese ? 'Rất xấu' : 'Very Unhealthy';
     } else {
       return isVietnamese ? 'Nguy hại' : 'Hazardous';
+    }
+  }
+
+  /// Calculate US AQI from PM2.5 concentration (μg/m³)
+  /// Based on US EPA AQI calculation formula
+  static int calculateAQIFromPM25(double pm25) {
+    if (pm25 <= 0) return 0;
+    
+    // AQI breakpoints for PM2.5 (US EPA standard)
+    if (pm25 <= 12.0) {
+      // AQI 0-50 (Good)
+      return ((50 - 0) / (12.0 - 0.0) * (pm25 - 0.0) + 0).round().clamp(0, 50);
+    } else if (pm25 <= 35.4) {
+      // AQI 51-100 (Moderate)
+      return ((100 - 51) / (35.4 - 12.1) * (pm25 - 12.1) + 51).round().clamp(51, 100);
+    } else if (pm25 <= 55.4) {
+      // AQI 101-150 (Unhealthy for Sensitive Groups)
+      return ((150 - 101) / (55.4 - 35.5) * (pm25 - 35.5) + 101).round().clamp(101, 150);
+    } else if (pm25 <= 150.4) {
+      // AQI 151-200 (Unhealthy)
+      return ((200 - 151) / (150.4 - 55.5) * (pm25 - 55.5) + 151).round().clamp(151, 200);
+    } else if (pm25 <= 250.4) {
+      // AQI 201-300 (Very Unhealthy)
+      return ((300 - 201) / (250.4 - 150.5) * (pm25 - 150.5) + 201).round().clamp(201, 300);
+    } else {
+      // AQI 301+ (Hazardous)
+      return ((500 - 301) / (500.4 - 250.5) * (pm25 - 250.5) + 301).round().clamp(301, 500);
     }
   }
 }

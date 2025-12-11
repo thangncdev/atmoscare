@@ -231,6 +231,38 @@ class AQISummaryCard extends StatelessWidget {
               ),
             ),
           ),
+
+          SizedBox(height: 12.h),
+
+          // Disclaimer
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: AppTheme.divider.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 14.w,
+                  color: AppTheme.textTertiary,
+                ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: Text(
+                    l10n.healthDisclaimer,
+                    style: TextStyle(
+                      color: AppTheme.textTertiary,
+                      fontSize: 10.sp,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

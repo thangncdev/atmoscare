@@ -337,4 +337,14 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get notificationPermissionDeniedMessage =>
       'Quyền thông báo đã bị từ chối. Vui lòng bật trong cài đặt ứng dụng để nhận cảnh báo thời tiết và chất lượng không khí.';
+
+  @override
+  String get healthDisclaimer =>
+      'Khuyến cáo trên chỉ mang tính chất tham khảo dựa trên tiêu chuẩn WHO/EPA. Không thay thế lời khuyên của chuyên gia y tế.';
+
+  @override
+  String get learnMoreAboutAQI => 'Tìm hiểu thêm về AQI';
+
+  @override
+  String get dataSource => 'Nguồn dữ liệu';
 }

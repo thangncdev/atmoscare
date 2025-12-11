@@ -166,6 +166,18 @@
   "notificationPermissionDeniedMessage": "Quyền thông báo đã bị từ chối. Vui lòng bật trong cài đặt ứng dụng để nhận cảnh báo thời tiết và chất lượng không khí.",
   "@notificationPermissionDeniedMessage": {
     "description": "Notification permission denied message"
+  },
+  "healthDisclaimer": "Khuyến cáo trên chỉ mang tính chất tham khảo dựa trên tiêu chuẩn WHO/EPA. Không thay thế lời khuyên của chuyên gia y tế.",
+  "@healthDisclaimer": {
+    "description": "Health recommendations disclaimer"
+  },
+  "learnMoreAboutAQI": "Tìm hiểu thêm về AQI",
+  "@learnMoreAboutAQI": {
+    "description": "Link text to learn more about AQI"
+  },
+  "dataSource": "Nguồn dữ liệu",
+  "@dataSource": {
+    "description": "Data source label"
   }
 }
 

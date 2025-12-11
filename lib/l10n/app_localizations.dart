@@ -721,6 +721,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.'**
   String get notificationPermissionDeniedMessage;
+
+  /// Health recommendations disclaimer
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations are for reference only, based on WHO/EPA standards. They do not replace professional medical advice.'**
+  String get healthDisclaimer;
+
+  /// Link text to learn more about AQI
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more about AQI'**
+  String get learnMoreAboutAQI;
+
+  /// Data source label
+  ///
+  /// In en, this message translates to:
+  /// **'Data source'**
+  String get dataSource;
 }
 
 class _AppLocalizationsDelegate

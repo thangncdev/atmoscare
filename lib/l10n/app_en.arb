@@ -430,6 +430,18 @@
   "notificationPermissionDeniedMessage": "Notification permission has been denied. Please enable it in app settings to receive weather and air quality alerts.",
   "@notificationPermissionDeniedMessage": {
     "description": "Notification permission denied message"
+  },
+  "healthDisclaimer": "Recommendations are for reference only, based on WHO/EPA standards. They do not replace professional medical advice.",
+  "@healthDisclaimer": {
+    "description": "Health recommendations disclaimer"
+  },
+  "learnMoreAboutAQI": "Learn more about AQI",
+  "@learnMoreAboutAQI": {
+    "description": "Link text to learn more about AQI"
+  },
+  "dataSource": "Data source",
+  "@dataSource": {
+    "description": "Data source label"
   }
 }
 

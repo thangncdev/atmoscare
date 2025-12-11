@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/aqi_provider.dart';
 import '../providers/notification_provider.dart';
 import '../providers/locale_provider.dart';
@@ -69,6 +70,8 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
                     _buildAQIScale(context, l10n),
                     SizedBox(height: 24.h),
                     _buildPollutants(context, aqi, l10n),
+                    SizedBox(height: 24.h),
+                    _buildDisclaimerAndSource(context, l10n),
                     SizedBox(height: 24.h),
                   ]),
                 ),
@@ -390,6 +393,200 @@ class _AQIScreenState extends ConsumerState<AQIScreen>
               ),
             );
           }),
+          SizedBox(height: 16.h),
+          // Disclaimer
+          Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: AppTheme.divider,
+              borderRadius: AppTheme.radiusLg,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 16.w,
+                      color: AppTheme.textSecondary,
+                    ),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        l10n.healthDisclaimer,
+                        style: TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 12.sp,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDisclaimerAndSource(BuildContext context, l10n) {
+    return Container(
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+        color: AppTheme.surface,
+        borderRadius: AppTheme.radius2xl,
+        boxShadow: AppTheme.shadowMd,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.link,
+                size: 20.w,
+                color: AppTheme.textSecondary,
+              ),
+              SizedBox(width: 8.w),
+              Text(
+                l10n.dataSource,
+                style: TextStyle(
+                  color: AppTheme.textPrimary,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12.h),
+          GestureDetector(
+            onTap: () async {
+              final uri = Uri.parse('https://www.airnow.gov/aqi/aqi-basics/');
+              try {
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Could not open link'),
+                      backgroundColor: AppTheme.aqiUnhealthy,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: AppTheme.divider,
+                borderRadius: AppTheme.radiusLg,
+                border: Border.all(
+                  color: AppTheme.border,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.learnMoreAboutAQI,
+                          style: TextStyle(
+                            color: AppTheme.primaryColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          'airnow.gov/aqi/aqi-basics/',
+                          style: TextStyle(
+                            color: AppTheme.textSecondary,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.open_in_new,
+                    size: 20.w,
+                    color: AppTheme.primaryColor,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 12.h),
+          GestureDetector(
+            onTap: () async {
+              final uri = Uri.parse('https://en.wikipedia.org/wiki/Air_quality_index#United_States');
+              try {
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Could not open link'),
+                      backgroundColor: AppTheme.aqiUnhealthy,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: AppTheme.divider,
+                borderRadius: AppTheme.radiusLg,
+                border: Border.all(
+                  color: AppTheme.border,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.learnMoreAboutAQI,
+                          style: TextStyle(
+                            color: AppTheme.primaryColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          'wikipedia Air_quality_index',
+                          style: TextStyle(
+                            color: AppTheme.textSecondary,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.open_in_new,
+                    size: 20.w,
+                    color: AppTheme.primaryColor,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
