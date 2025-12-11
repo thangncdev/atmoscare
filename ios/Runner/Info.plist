@@ -26,8 +26,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Ứng dụng cần quyền truy cập vị trí để hiển thị thời tiết và chất lượng không khí tại vị trí của bạn.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ứng dụng cần quyền truy cập vị trí để hiển thị thời tiết và chất lượng không khí tại vị trí của bạn.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
