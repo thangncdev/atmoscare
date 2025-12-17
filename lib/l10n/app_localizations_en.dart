@@ -239,6 +239,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get getCurrentLocationFromGPS => 'Get current location from GPS';
 
   @override
+  String get unableToGetCurrentLocation => 'Unable to get current location';
+
+  @override
   String get enterCityNameToSearch => 'Enter city name to search';
 
   @override
@@ -277,6 +280,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dailyWeatherReminderBody =>
       'Check the weather forecast to plan for a great day!';
+
+  @override
+  String get botWeatherAlertTitle => 'Weather Alert';
+
+  @override
+  String get botTodayWeatherTitle => 'Today\'s Weather';
+
+  @override
+  String get botRainWarning =>
+      'Rain expected. Please bring an umbrella when going outside!';
+
+  @override
+  String botHighAQIWarning(Object status, Object aqi) {
+    return 'Air quality: $status (AQI: $aqi). Please wear a mask when going outside!';
+  }
+
+  @override
+  String botLowTempWarning(Object tempMin) {
+    return 'Low temperature ($tempMin°C). Please keep warm when going outside!';
+  }
+
+  @override
+  String botHighUVWarning(Object uvIndex) {
+    return 'High UV index $uvIndex. Please avoid going outside when UV is high!';
+  }
+
+  @override
+  String botNiceWeatherBody(
+    Object weatherDesc,
+    Object tempMin,
+    Object tempMax,
+  ) {
+    return '$weatherDesc. Temperature: $tempMin-$tempMax°C. Nice weather, perfect for outdoor activities!';
+  }
 
   @override
   String get enableNotificationsTitle => 'Enable Notifications';

@@ -1,12 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../domain/entities/location_entity.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../../data/repositories/location_repository_impl.dart';
 import '../../data/utils/location_exceptions.dart';
+import '../../l10n/app_localizations.dart';
+import 'locale_provider.dart';
 
 /// Provider cho LocationRepository
-final locationRepositoryProvider =
-    Provider<LocationRepository>((ref) => LocationRepositoryImpl());
+final locationRepositoryProvider = Provider<LocationRepository>(
+  (ref) => LocationRepositoryImpl(),
+);
 
 /// Loại lỗi location
 enum LocationErrorType {
@@ -33,17 +37,19 @@ class LocationState {
     this.searchResults = const [],
   });
 
+  static const Object _unset = Object();
+
   LocationState copyWith({
     LocationEntity? currentLocation,
     bool? isLoading,
-    String? error,
+    Object? error = _unset,
     LocationErrorType? errorType,
     List<LocationEntity>? searchResults,
   }) {
     return LocationState(
       currentLocation: currentLocation ?? this.currentLocation,
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      error: error == _unset ? this.error : error as String?,
       errorType: errorType ?? this.errorType,
       searchResults: searchResults ?? this.searchResults,
     );
@@ -52,11 +58,15 @@ class LocationState {
 
 /// Notifier cho quản lý location state
 class LocationNotifier extends StateNotifier<LocationState> {
+  final Ref _ref;
   final LocationRepository _repository;
 
-  LocationNotifier(this._repository) : super(const LocationState()) {
+  LocationNotifier(this._ref, this._repository) : super(const LocationState()) {
     _initialize();
   }
+
+  AppLocalizations get _l10n =>
+      lookupAppLocalizations(_ref.read(localeProvider));
 
   /// Khởi tạo: lấy location đã lưu hoặc vị trí hiện tại
   Future<void> _initialize() async {
@@ -73,6 +83,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
 
   /// Lấy vị trí hiện tại từ GPS
   Future<void> getCurrentLocation() async {
+    final l10n = _l10n;
     state = state.copyWith(
       isLoading: true,
       error: null,
@@ -91,28 +102,10 @@ class LocationNotifier extends StateNotifier<LocationState> {
       } else {
         state = state.copyWith(
           isLoading: false,
-          error: 'Không thể lấy vị trí hiện tại',
+          error: l10n.unableToGetCurrentLocation,
           errorType: LocationErrorType.other,
         );
       }
-    } on AppLocationServiceDisabledException catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-        errorType: LocationErrorType.serviceDisabled,
-      );
-    } on AppLocationPermissionDeniedException catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-        errorType: LocationErrorType.permissionDenied,
-      );
-    } on AppLocationPermissionDeniedForeverException catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-        errorType: LocationErrorType.permissionDeniedForever,
-      );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -150,10 +143,7 @@ class LocationNotifier extends StateNotifier<LocationState> {
   Future<void> selectLocation(LocationEntity location) async {
     try {
       await _repository.saveSelectedLocation(location);
-      state = state.copyWith(
-        currentLocation: location,
-        searchResults: [],
-      );
+      state = state.copyWith(currentLocation: location, searchResults: []);
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }
@@ -163,17 +153,43 @@ class LocationNotifier extends StateNotifier<LocationState> {
   void clearSearchResults() {
     state = state.copyWith(searchResults: []);
   }
+
+  Future<bool> checkLocationPermissions() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw AppLocationServiceDisabledException('Location service is disabled');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      // Xin quyền (lần đầu hoặc bị từ chối nhưng vẫn có thể request lại)
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw AppLocationPermissionDeniedForeverException(
+        'Location permission is denied forever',
+      );
+    }
+    if (permission == LocationPermission.denied) {
+      // Người dùng vừa từ chối sau khi xin quyền
+      throw AppLocationPermissionDeniedException(
+        'Location permission is denied',
+      );
+    }
+    return true;
+  }
 }
 
 /// Provider cho LocationNotifier
-final locationProvider =
-    StateNotifierProvider<LocationNotifier, LocationState>((ref) {
-  final repository = ref.watch(locationRepositoryProvider);
-  return LocationNotifier(repository);
-});
+final locationProvider = StateNotifierProvider<LocationNotifier, LocationState>(
+  (ref) {
+    final repository = ref.watch(locationRepositoryProvider);
+    return LocationNotifier(ref, repository);
+  },
+);
 
 /// Provider để lấy current location (nullable)
 final currentLocationProvider = Provider<LocationEntity?>((ref) {
   return ref.watch(locationProvider).currentLocation;
 });
-

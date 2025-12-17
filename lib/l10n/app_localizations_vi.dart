@@ -238,6 +238,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get getCurrentLocationFromGPS => 'Lấy vị trí hiện tại từ GPS';
 
   @override
+  String get unableToGetCurrentLocation => 'Không thể lấy vị trí hiện tại';
+
+  @override
   String get enterCityNameToSearch => 'Nhập tên thành phố để tìm kiếm';
 
   @override
@@ -276,6 +279,39 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get dailyWeatherReminderBody =>
       'Hãy xem dự báo thời tiết để có kế hoạch cho một ngày tốt đẹp!';
+
+  @override
+  String get botWeatherAlertTitle => 'Cảnh báo thời tiết';
+
+  @override
+  String get botTodayWeatherTitle => 'Thời tiết hôm nay';
+
+  @override
+  String get botRainWarning => 'Trời có mưa. Hãy mang ô mưa khi ra ngoài!';
+
+  @override
+  String botHighAQIWarning(Object status, Object aqi) {
+    return 'Chất lượng không khí: $status (AQI: $aqi). Hãy đeo khẩu trang khi ra ngoài!';
+  }
+
+  @override
+  String botLowTempWarning(Object tempMin) {
+    return 'Nhiệt độ thấp nhất $tempMin°C. Hãy giữ ấm khi ra ngoài!';
+  }
+
+  @override
+  String botHighUVWarning(Object uvIndex) {
+    return 'Chỉ số UV cao $uvIndex. Hãy tránh đi ngoài trời khi UV cao!';
+  }
+
+  @override
+  String botNiceWeatherBody(
+    Object weatherDesc,
+    Object tempMin,
+    Object tempMax,
+  ) {
+    return '$weatherDesc. Nhiệt độ: $tempMin-$tempMax°C. Thời tiết đẹp, phù hợp cho hoạt động ngoài trời!';
+  }
 
   @override
   String get enableNotificationsTitle => 'Bật thông báo';

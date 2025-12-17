@@ -1,3 +1,4 @@
+import 'package:atmoscare/constants/location.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../domain/entities/weather_entity.dart';
@@ -19,8 +20,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
 
   // Default location: Ho Chi Minh City
-  static const double _defaultLatitude = 10.7546181;
-  static const double _defaultLongitude = 106.3655737;
+  static double defaultLatitude = LocationConstants.defaultPosition.latitude;
+  static double defaultLongitude = LocationConstants.defaultPosition.longitude;
 
   @override
   Future<WeatherEntity> getCurrentWeather({
@@ -28,8 +29,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
     Locale? locale,
   }) async {
     try {
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? defaultLatitude;
+      final lon = location?.longitude ?? defaultLongitude;
       final locationName = location?.shortDisplayName ?? 'Hà Nội';
       final country = location?.country ?? 'Việt Nam';
       final response = await _dio.get(
@@ -110,8 +111,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
     Locale? locale,
   }) async {
     try {
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? defaultLatitude;
+      final lon = location?.longitude ?? defaultLongitude;
 
       final response = await _dio.get(
         _baseUrl,
@@ -181,8 +182,8 @@ class WeatherRepositoryImpl implements WeatherRepository {
     Locale? locale,
   }) async {
     try {
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? defaultLatitude;
+      final lon = location?.longitude ?? defaultLongitude;
 
       final response = await _dio.get(
         _baseUrl,

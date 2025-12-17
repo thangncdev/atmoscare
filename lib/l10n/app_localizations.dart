@@ -542,6 +542,12 @@ abstract class AppLocalizations {
   /// **'Get current location from GPS'**
   String get getCurrentLocationFromGPS;
 
+  /// Error message when unable to get current location
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to get current location'**
+  String get unableToGetCurrentLocation;
+
   /// Enter city name to search message
   ///
   /// In en, this message translates to:
@@ -613,6 +619,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check the weather forecast to plan for a great day!'**
   String get dailyWeatherReminderBody;
+
+  /// Bot reminder card title when there is any warning
+  ///
+  /// In en, this message translates to:
+  /// **'Weather Alert'**
+  String get botWeatherAlertTitle;
+
+  /// Bot reminder card title when conditions are safe
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Weather'**
+  String get botTodayWeatherTitle;
+
+  /// Bot warning when rain is expected
+  ///
+  /// In en, this message translates to:
+  /// **'Rain expected. Please bring an umbrella when going outside!'**
+  String get botRainWarning;
+
+  /// Bot warning when AQI is high
+  ///
+  /// In en, this message translates to:
+  /// **'Air quality: {status} (AQI: {aqi}). Please wear a mask when going outside!'**
+  String botHighAQIWarning(Object status, Object aqi);
+
+  /// Bot warning when minimum temperature is low
+  ///
+  /// In en, this message translates to:
+  /// **'Low temperature ({tempMin}°C). Please keep warm when going outside!'**
+  String botLowTempWarning(Object tempMin);
+
+  /// Bot warning when UV index is high
+  ///
+  /// In en, this message translates to:
+  /// **'High UV index {uvIndex}. Please avoid going outside when UV is high!'**
+  String botHighUVWarning(Object uvIndex);
+
+  /// Bot message when conditions are safe
+  ///
+  /// In en, this message translates to:
+  /// **'{weatherDesc}. Temperature: {tempMin}-{tempMax}°C. Nice weather, perfect for outdoor activities!'**
+  String botNiceWeatherBody(Object weatherDesc, Object tempMin, Object tempMax);
 
   /// Enable notifications dialog title
   ///

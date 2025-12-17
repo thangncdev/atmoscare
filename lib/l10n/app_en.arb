@@ -311,6 +311,10 @@
   "@getCurrentLocationFromGPS": {
     "description": "Get current location from GPS subtitle"
   },
+  "unableToGetCurrentLocation": "Unable to get current location",
+  "@unableToGetCurrentLocation": {
+    "description": "Error message when unable to get current location"
+  },
   "enterCityNameToSearch": "Enter city name to search",
   "@enterCityNameToSearch": {
     "description": "Enter city name to search message"
@@ -358,6 +362,49 @@
   "dailyWeatherReminderBody": "Check the weather forecast to plan for a great day!",
   "@dailyWeatherReminderBody": {
     "description": "Daily weather reminder notification body"
+  },
+  "botWeatherAlertTitle": "Weather Alert",
+  "@botWeatherAlertTitle": {
+    "description": "Bot reminder card title when there is any warning"
+  },
+  "botTodayWeatherTitle": "Today's Weather",
+  "@botTodayWeatherTitle": {
+    "description": "Bot reminder card title when conditions are safe"
+  },
+  "botRainWarning": "Rain expected. Please bring an umbrella when going outside!",
+  "@botRainWarning": {
+    "description": "Bot warning when rain is expected"
+  },
+  "botHighAQIWarning": "Air quality: {status} (AQI: {aqi}). Please wear a mask when going outside!",
+  "@botHighAQIWarning": {
+    "description": "Bot warning when AQI is high",
+    "placeholders": {
+      "status": {},
+      "aqi": {}
+    }
+  },
+  "botLowTempWarning": "Low temperature ({tempMin}°C). Please keep warm when going outside!",
+  "@botLowTempWarning": {
+    "description": "Bot warning when minimum temperature is low",
+    "placeholders": {
+      "tempMin": {}
+    }
+  },
+  "botHighUVWarning": "High UV index {uvIndex}. Please avoid going outside when UV is high!",
+  "@botHighUVWarning": {
+    "description": "Bot warning when UV index is high",
+    "placeholders": {
+      "uvIndex": {}
+    }
+  },
+  "botNiceWeatherBody": "{weatherDesc}. Temperature: {tempMin}-{tempMax}°C. Nice weather, perfect for outdoor activities!",
+  "@botNiceWeatherBody": {
+    "description": "Bot message when conditions are safe",
+    "placeholders": {
+      "weatherDesc": {},
+      "tempMin": {},
+      "tempMax": {}
+    }
   },
   "enableNotificationsTitle": "Enable Notifications",
   "@enableNotificationsTitle": {

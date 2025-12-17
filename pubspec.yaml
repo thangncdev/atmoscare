@@ -56,6 +56,9 @@ dependencies:
   # Package Info
   package_info_plus: ^8.1.1
   flutter_timezone: ^5.0.1
+
+  # Lottie Animations
+  lottie: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,7 +78,7 @@ flutter:
 
   assets:
     - assets/data/
-
+    - assets/animation/
   fonts:
     - family: OpenSans
       fonts:

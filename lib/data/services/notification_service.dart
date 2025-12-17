@@ -14,6 +14,7 @@ import '../../presentation/core/theme.dart';
 import '../repositories/location_repository_impl.dart';
 import '../utils/aqi_helper.dart';
 import '../utils/weather_code_mapper.dart';
+import '../../constants/location.dart';
 
 final List<String> dailyNotificationTitlesVietnamese = [
   'Hôm nay thời tiết thế nào?',
@@ -85,8 +86,8 @@ class NotificationService {
   final LocationRepositoryImpl _locationRepository = LocationRepositoryImpl();
 
   // Default location: Hanoi
-  static const double _defaultLatitude = 21.0285;
-  static const double _defaultLongitude = 105.8542;
+  static double defaultLatitude = LocationConstants.defaultPosition.latitude;
+  static double defaultLongitude = LocationConstants.defaultPosition.longitude;
 
   /// Initialize notification service
   Future<bool> initialize() async {
@@ -245,8 +246,8 @@ class NotificationService {
   Future<Map<String, dynamic>?> _fetchWeatherData({int dayOffset = 0}) async {
     try {
       final location = await _locationRepository.getSavedLocation();
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? defaultLatitude;
+      final lon = location?.longitude ?? defaultLongitude;
 
       // Fetch forecast for the next few days to get the target day
       final response = await _dio.get(
@@ -294,8 +295,8 @@ class NotificationService {
   Future<int?> _fetchAQIData() async {
     try {
       final location = await _locationRepository.getSavedLocation();
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? defaultLatitude;
+      final lon = location?.longitude ?? defaultLongitude;
 
       final response = await _dio.get(
         'https://air-quality-api.open-meteo.com/v1/air-quality',
@@ -415,7 +416,7 @@ class NotificationService {
         DateTime.now().year,
         DateTime.now().month,
         DateTime.now().day,
-        7, // 8 AM
+        6, // 8 AM
         0,
       );
 

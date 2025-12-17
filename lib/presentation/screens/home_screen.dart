@@ -14,6 +14,7 @@ import '../widgets/weather_detail_card.dart';
 import '../widgets/forecast_hourly_list_widget.dart';
 import '../widgets/skeleton_loading.dart';
 import '../widgets/error_widget.dart';
+import '../widgets/weather_bot_reminder_card.dart';
 import 'location_search_screen.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -139,8 +140,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 16.h),
 
+                      // Cute bot reminder (based on notification warning logic)
+                      aqiAsync.when(
+                        data: (aqi) =>
+                            WeatherBotReminderCard(weather: weather, aqi: aqi),
+                        loading: () =>
+                            WeatherBotReminderCard(weather: weather, aqi: null),
+                        error: (_, __) =>
+                            WeatherBotReminderCard(weather: weather, aqi: null),
+                      ),
+                      SizedBox(height: 16.h),
                       // AQI Summary Card
                       aqiAsync.when(
                         data: (aqi) => AQISummaryCard(aqi: aqi),
@@ -160,12 +170,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       //   },
                       //   child: Text('Test Notification'),
                       // ),
-                      // TextButton(
-                      //   onPressed: () {
-                      //     NotificationService().showWeatherAlertNotification();
-                      //   },
-                      //   child: Text('Weather Alert Notification'),
-                      // ),
+                      TextButton(
+                        onPressed: () {
+                          NotificationService().showWeatherAlertNotification();
+                        },
+                        child: Text('Weather Alert Notification'),
+                      ),
                       SizedBox(height: 24.h),
 
                       // Sunrise/Sunset

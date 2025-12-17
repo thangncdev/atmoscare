@@ -5,6 +5,7 @@ import '../core/theme.dart';
 import '../core/screen_util_helper.dart';
 import '../providers/location_provider.dart';
 import '../../domain/entities/location_entity.dart';
+import '../../data/utils/location_exceptions.dart';
 import '../../l10n/app_localizations.dart';
 
 /// Màn hình tìm kiếm và chọn vị trí
@@ -50,18 +51,30 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
   }
 
   void _onUseCurrentLocation() async {
+    try {
+      await ref.read(locationProvider.notifier).checkLocationPermissions();
+    } on AppLocationServiceDisabledException {
+      _showLocationErrorDialog(LocationErrorType.serviceDisabled);
+      return;
+    } on AppLocationPermissionDeniedForeverException {
+      _showLocationErrorDialog(LocationErrorType.permissionDeniedForever);
+      return;
+    } on AppLocationPermissionDeniedException {
+      _showLocationErrorDialog(LocationErrorType.permissionDenied);
+      return;
+    }
     await ref.read(locationProvider.notifier).getCurrentLocation();
-    
+
     if (!mounted) return;
-    
+
     final locationState = ref.read(locationProvider);
-    
+
     // Nếu thành công, đóng màn hình
     if (locationState.currentLocation != null) {
       Navigator.of(context).pop();
       return;
     }
-    
+
     // Nếu có lỗi, hiển thị dialog
     if (locationState.error != null) {
       _showLocationErrorDialog(locationState.errorType);
@@ -70,9 +83,9 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
 
   void _showLocationErrorDialog(LocationErrorType errorType) {
     if (!mounted) return;
-    
+
     final l10n = AppLocalizations.of(context)!;
-    
+
     showDialog(
       context: context,
       builder: (dialogContext) {
@@ -109,14 +122,9 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
               TextButton(
                 onPressed: () async {
                   Navigator.of(dialogContext).pop();
-                  // Request permission lại
-                  await ref.read(locationProvider.notifier).getCurrentLocation();
-                  final newState = ref.read(locationProvider);
-                  if (newState.currentLocation != null && mounted) {
-                    Navigator.of(context).pop();
-                  }
+                  await Geolocator.openAppSettings();
                 },
-                child: Text(l10n.grantPermission),
+                child: Text(l10n.openSettings),
               ),
             ];
             break;
@@ -152,9 +160,7 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
           title: Text(title),
           content: Text(message),
           actions: actions,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppTheme.radius2xl,
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppTheme.radius2xl),
         );
       },
     );
@@ -175,118 +181,99 @@ class _LocationSearchScreenState extends ConsumerState<LocationSearchScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: TextField(
-              controller: _searchController,
-              focusNode: _searchFocusNode,
-              onChanged: _onSearchChanged,
-              decoration: InputDecoration(
-                hintText: l10n.searchCity,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          _onSearchChanged('');
-                        },
-                      )
-                    : null,
-                filled: true,
-                fillColor: AppTheme.surface,
-                border: OutlineInputBorder(
-                  borderRadius: AppTheme.radius2xl,
-                  borderSide: BorderSide(color: AppTheme.border),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: AppTheme.radius2xl,
-                  borderSide: BorderSide(color: AppTheme.border),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: AppTheme.radius2xl,
-                  borderSide: BorderSide(color: AppTheme.primaryColor),
+      body: Padding(
+        padding: AppTheme.paddingHorizontal,
+        child: Column(
+          children: [
+            // Search Bar
+            Padding(
+              padding: AppTheme.paddingVertical,
+              child: TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                onChanged: _onSearchChanged,
+                decoration: InputDecoration(
+                  hintText: l10n.searchCity,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            _onSearchChanged('');
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: AppTheme.surface,
+                  border: OutlineInputBorder(
+                    borderRadius: AppTheme.radius2xl,
+                    borderSide: BorderSide(color: AppTheme.border),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: AppTheme.radius2xl,
+                    borderSide: BorderSide(color: AppTheme.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: AppTheme.radius2xl,
+                    borderSide: BorderSide(color: AppTheme.primaryColor),
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Use Current Location Button
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: _LocationTile(
+            // Use Current Location Button
+            _LocationTile(
               icon: Icons.gps_fixed,
               title: l10n.currentLocation,
               subtitle: l10n.getCurrentLocationFromGPS,
               onTap: _onUseCurrentLocation,
             ),
-          ),
 
-          SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
 
-          // Search Results
-          Expanded(
-            child: locationState.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : locationState.error != null
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 48.w,
-                          color: AppTheme.textSecondary,
-                        ),
-                        SizedBox(height: 16.h),
-                        Text(
-                          locationState.error!,
-                          style: TextStyle(color: AppTheme.textSecondary),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
-                : locationState.searchResults.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
-                          size: 48.w,
-                          color: AppTheme.textTertiary,
-                        ),
-                        SizedBox(height: 16.h),
-                        Text(
-                          l10n.enterCityNameToSearch,
-                          style: TextStyle(
+            // Search Results
+            Expanded(
+              child: locationState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : locationState.searchResults.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search,
+                            size: 48.w,
                             color: AppTheme.textTertiary,
-                            fontSize: 14.sp,
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 16.h),
+                          Text(
+                            l10n.enterCityNameToSearch,
+                            style: TextStyle(
+                              color: AppTheme.textTertiary,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: locationState.searchResults.length,
+                      itemBuilder: (context, index) {
+                        final location = locationState.searchResults[index];
+                        final isSelected = currentLocation?.id == location.id;
+                        return _LocationTile(
+                          icon: Icons.location_on,
+                          title: location.name,
+                          subtitle: location.displayName,
+                          onTap: () => _onLocationSelected(location),
+                          isSelected: isSelected,
+                        );
+                      },
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: locationState.searchResults.length,
-                    itemBuilder: (context, index) {
-                      final location = locationState.searchResults[index];
-                      final isSelected = currentLocation?.id == location.id;
-                      return _LocationTile(
-                        icon: Icons.location_on,
-                        title: location.name,
-                        subtitle: location.displayName,
-                        onTap: () => _onLocationSelected(location),
-                        isSelected: isSelected,
-                      );
-                    },
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

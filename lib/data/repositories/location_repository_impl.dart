@@ -6,6 +6,7 @@ import '../../domain/entities/location_entity.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../models/location_model.dart';
 import '../utils/location_exceptions.dart';
+import '../../constants/location.dart';
 
 /// Implementation của LocationRepository
 class LocationRepositoryImpl implements LocationRepository {
@@ -13,6 +14,7 @@ class LocationRepositoryImpl implements LocationRepository {
   static const String _geocodingBaseUrl =
       'https://geocoding-api.open-meteo.com/v1/search';
   static const String _savedLocationKey = 'saved_location';
+  static Position defaultPosition = LocationConstants.defaultPosition;
 
   @override
   Future<List<LocationEntity>> searchLocations(String query) async {
@@ -46,37 +48,39 @@ class LocationRepositoryImpl implements LocationRepository {
     }
   }
 
+  checkLocationPermissions() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw AppLocationServiceDisabledException('Location service is disabled');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      throw AppLocationPermissionDeniedException(
+        'Location permission is denied',
+      );
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw AppLocationPermissionDeniedForeverException(
+        'Location permission is denied forever',
+      );
+    }
+    return true;
+  }
+
   @override
   Future<LocationEntity?> getCurrentLocation() async {
     try {
-      // Kiểm tra dịch vụ vị trí có bật không
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        throw AppLocationServiceDisabledException();
+      Position position = defaultPosition;
+      final hasPermissions = await checkLocationPermissions();
+      if (hasPermissions) {
+        position = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.medium,
+          ),
+        );
       }
-
-      // Kiểm tra quyền truy cập vị trí
-      LocationPermission permission = await Geolocator.checkPermission();
-      
-      // Nếu chưa có quyền, yêu cầu quyền
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          throw AppLocationPermissionDeniedException();
-        }
-      }
-
-      // Nếu bị từ chối vĩnh viễn, cần mở settings
-      if (permission == LocationPermission.deniedForever) {
-        throw AppLocationPermissionDeniedForeverException();
-      }
-
-      // Lấy vị trí hiện tại
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium,
-        ),
-      );
 
       // Reverse geocoding để lấy tên địa điểm thực tế
       // Sử dụng Nominatim (OpenStreetMap) API để reverse geocoding
@@ -90,11 +94,7 @@ class LocationRepositoryImpl implements LocationRepository {
             'addressdetails': 1,
             'accept-language': 'vi,en',
           },
-          options: Options(
-            headers: {
-              'User-Agent': 'Atmos Care Weather App',
-            },
-          ),
+          options: Options(headers: {'User-Agent': 'Atmos Care Weather App'}),
         );
 
         final reverseData = reverseResponse.data as Map<String, dynamic>;
@@ -102,7 +102,8 @@ class LocationRepositoryImpl implements LocationRepository {
 
         if (address != null) {
           // Lấy tên địa điểm từ address
-          final name = address['city'] as String? ??
+          final name =
+              address['city'] as String? ??
               address['town'] as String? ??
               address['village'] as String? ??
               address['municipality'] as String? ??
@@ -110,13 +111,15 @@ class LocationRepositoryImpl implements LocationRepository {
               address['state'] as String? ??
               'Unknown Location';
 
-          final admin1 = address['state'] as String? ??
-              address['region'] as String?;
-          final admin2 = address['city'] as String? ??
+          final admin1 =
+              address['state'] as String? ?? address['region'] as String?;
+          final admin2 =
+              address['city'] as String? ??
               address['town'] as String? ??
               address['municipality'] as String?;
           final country = address['country'] as String?;
-          final countryCode = (address['country_code'] as String?)?.toUpperCase();
+          final countryCode = (address['country_code'] as String?)
+              ?.toUpperCase();
 
           return LocationModel(
             id: DateTime.now().millisecondsSinceEpoch, // Generate unique ID
@@ -137,7 +140,8 @@ class LocationRepositoryImpl implements LocationRepository {
       // Fallback: tạo location với tên từ tọa độ
       return LocationModel(
         id: DateTime.now().millisecondsSinceEpoch,
-        name: '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}',
+        name:
+            '${position.latitude.toStringAsFixed(2)}, ${position.longitude.toStringAsFixed(2)}',
         latitude: position.latitude,
         longitude: position.longitude,
         elevation: position.altitude,
@@ -158,7 +162,7 @@ class LocationRepositoryImpl implements LocationRepository {
     try {
       final prefs = await SharedPreferences.getInstance();
       Map<String, dynamic> json;
-      
+
       if (location is LocationModel) {
         json = location.toJson();
       } else {
@@ -176,7 +180,7 @@ class LocationRepositoryImpl implements LocationRepository {
           'timezone': location.timezone,
         };
       }
-      
+
       await prefs.setString(_savedLocationKey, jsonEncode(json));
     } catch (e) {
       throw Exception('Failed to save location: $e');
@@ -199,4 +203,3 @@ class LocationRepositoryImpl implements LocationRepository {
     }
   }
 }
-

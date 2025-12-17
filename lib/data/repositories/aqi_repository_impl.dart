@@ -1,3 +1,4 @@
+import 'package:atmoscare/constants/location.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,14 +16,13 @@ class AQIRepositoryImpl implements AQIRepository {
   static const String _aqiAlertKey = 'aqi_alert_enabled';
   
   // Default location: Ho Chi Minh City
-  static const double _defaultLatitude = 10.7546181;
-  static const double _defaultLongitude = 106.3655737;
+  
 
   @override
   Future<AQIEntity> getCurrentAQI({LocationEntity? location, Locale? locale}) async {
     try {
-      final lat = location?.latitude ?? _defaultLatitude;
-      final lon = location?.longitude ?? _defaultLongitude;
+      final lat = location?.latitude ?? LocationConstants.defaultPosition.latitude;
+      final lon = location?.longitude ?? LocationConstants.defaultPosition.longitude;
       final locationName = location?.shortDisplayName ?? '';
 
       final response = await _dio.get(
