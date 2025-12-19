@@ -102,7 +102,7 @@
   "locationPermissionDenied": "Quyền truy cập vị trí bị từ chối",
   "locationPermissionDeniedMessage": "Chúng tôi cần quyền truy cập vị trí để hiển thị thời tiết tại vị trí hiện tại của bạn.",
   "locationPermissionDeniedForever": "Cần quyền truy cập vị trí",
-  "locationPermissionDeniedForeverMessage": "Quyền truy cập vị trí đã bị từ chối vĩnh viễn. Vui lòng bật trong cài đặt ứng dụng.",
+  "locationPermissionDeniedForeverMessage": "Để sử dụng tính năng lấy thời tiết theo vị trí hiện tại bạn cần cấp quyền truy cập vị trí cho ứng dụng. Vui lòng cấp quyền ở trong cài đặt",
   "openSettings": "Mở Cài đặt",
   "cancel": "Hủy",
   "grantPermission": "Cấp quyền",

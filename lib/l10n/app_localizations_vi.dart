@@ -262,7 +262,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get locationPermissionDeniedForeverMessage =>
-      'Quyền truy cập vị trí đã bị từ chối vĩnh viễn. Vui lòng bật trong cài đặt ứng dụng.';
+      'Để sử dụng tính năng lấy thời tiết theo vị trí hiện tại bạn cần cấp quyền truy cập vị trí cho ứng dụng. Vui lòng cấp quyền ở trong cài đặt';
 
   @override
   String get openSettings => 'Mở Cài đặt';

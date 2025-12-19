@@ -429,14 +429,7 @@ class NotificationService {
 
       // Fetch weather data for the day the notification is scheduled for
       // dayOffset: 0 = today, 1 = tomorrow
-      final dayOffset = isTomorrow ? 1 : 0;
-      final weatherData = await _fetchWeatherData(dayOffset: dayOffset);
-      final aqi = await _fetchAQIData();
-      final message = await _generateWeatherAlertMessage(
-        weatherData,
-        aqi,
-        locale,
-      );
+      final message = await _generateWeatherAlertMessage(null, null, locale);
 
       // Android notification details
       const androidDetails = AndroidNotificationDetails(

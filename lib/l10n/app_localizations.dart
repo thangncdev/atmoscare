@@ -587,7 +587,7 @@ abstract class AppLocalizations {
   /// Location permission denied forever message
   ///
   /// In en, this message translates to:
-  /// **'Location permission has been permanently denied. Please enable it in app settings.'**
+  /// **'To use the feature of getting weather based on your current location, you need to grant location permission to the app. Please grant permission in settings.'**
   String get locationPermissionDeniedForeverMessage;
 
   /// Open settings button

@@ -263,7 +263,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationPermissionDeniedForeverMessage =>
-      'Location permission has been permanently denied. Please enable it in app settings.';
+      'To use the feature of getting weather based on your current location, you need to grant location permission to the app. Please grant permission in settings.';
 
   @override
   String get openSettings => 'Open Settings';

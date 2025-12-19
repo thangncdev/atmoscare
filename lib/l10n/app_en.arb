@@ -339,7 +339,7 @@
   "@locationPermissionDeniedForever": {
     "description": "Location permission denied forever title"
   },
-  "locationPermissionDeniedForeverMessage": "Location permission has been permanently denied. Please enable it in app settings.",
+  "locationPermissionDeniedForeverMessage": "To use the feature of getting weather based on your current location, you need to grant location permission to the app. Please grant permission in settings.",
   "@locationPermissionDeniedForeverMessage": {
     "description": "Location permission denied forever message"
   },

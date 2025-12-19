@@ -170,12 +170,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       //   },
                       //   child: Text('Test Notification'),
                       // ),
-                      TextButton(
-                        onPressed: () {
-                          NotificationService().showWeatherAlertNotification();
-                        },
-                        child: Text('Weather Alert Notification'),
-                      ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     NotificationService().showWeatherAlertNotification();
+                      //   },
+                      //   child: Text('Weather Alert Notification'),
+                      // ),
                       SizedBox(height: 24.h),
 
                       // Sunrise/Sunset
